@@ -1,0 +1,42 @@
+[logging]
+level = "INFO"
+logfile = "log/simple_pipe.log"
+
+[pipeline]
+# Database scheme name raw, staging, production etc
+schema = "raw"
+# local 'duckdb' or remote 'motherduck' 
+database = "duckdb"
+
+[pipeline_tasks]
+# list of pipeline task names and task type 'excel','cvs' etc
+worksheet_a = "excel"
+worksheet_b = "excel"
+date_table = "csv"
+
+[worksheet_a]
+url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQkKSuXlZFBTun7qhgjC2Z1BnenLjHt4Al16MdITaPFlHTfN-vb_Ip42kzki81t8ZPu93gpK-AAoYgj/pub?output=xlsx"
+workbook = "HAPPYAFLOAT TOTAL LOG"
+skiprows = 4
+columns = "a:m"
+sql_filter = ""
+sql_table = "log_a"
+
+[worksheet_b]
+url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQkKSuXlZFBTun7qhgjC2Z1BnenLjHt4Al16MdITaPFlHTfN-vb_Ip42kzki81t8ZPu93gpK-AAoYgj/pub?output=xlsx"
+workbook = "Summer 2019"
+skiprows = 4
+columns = "a:k"
+sql_filter = ""
+sql_table = "log_a"
+
+[date_table]
+url = "data/dim_dates.csv"
+sql_filter = ""
+sql_table = "dim_dates"
+
+[duckdb.credentials]
+# local duckdb database name. Remote motherduck credentials are stored in secret.toml
+database = "simple_pipe.duckdb"
+
+

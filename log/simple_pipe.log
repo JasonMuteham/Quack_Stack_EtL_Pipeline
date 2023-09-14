@@ -1,0 +1,4 @@
+14/09/2023 16:36:20 INFO: Simple Pipe: Lighting the fire!
+************************************************************
+14/09/2023 16:36:20 INFO: Pipeline Config: schema: raw , database: duckdb
+14/09/2023 16:36:20 INFO: Connecting to database duckdb: simple_pipe.duckdb 
