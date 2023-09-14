@@ -13,10 +13,9 @@ def excel(excel_url, excel_workbook, excel_skiprows, excel_usecols):
         logging.error(f'get_excel: {e}')
         return
     else:
-        logging.info(f'get_excel: Data extracted from excel: "{excel_url}" "{excel_workbook}"')
-        logging.info(f'get_excel: Data shape: {df.shape}')
+        logging.info(f'- get_excel: Data extracted from excel: "{excel_url}" "{excel_workbook}"')
+        logging.info(f'- get_excel: Data shape: {df.shape}')
 
-    logging.info('get_excel: Finished')
     return df
 
 def csv(url: str):

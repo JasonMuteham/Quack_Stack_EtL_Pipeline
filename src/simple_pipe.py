@@ -1,7 +1,7 @@
 from pathlib import Path
 import pandas as pd
 import get
-#import database
+import database
 import logging
 import tomllib
 
@@ -18,9 +18,10 @@ if __name__ == "__main__":
          raise
 
     log_file = pipe_cfg['logging']['logfile']
-
+    log_path = pipe_cfg['logging']['log_folder']
+    log_file = log_path + log_file
     try:
-        Path('log').mkdir(exist_ok=True)
+        Path(log_path).mkdir(exist_ok=True)
     except Exception as e:
         print(e)
         raise
@@ -37,6 +38,9 @@ if __name__ == "__main__":
     print("Pipe lit!")
 
     pipeline = pipe_cfg['pipeline']
+    logging.info(f'Found pipeline: {pipeline["name"]}')
+    logging.info(f'Pipeline Description: {pipeline["description"]}')
+    
     logging.info(f"Pipeline Config: schema: {pipeline['schema']} , database: {pipeline['database']}" )
 
     db_name = pipe_cfg[pipeline['database']]['credentials']['database']
@@ -51,27 +55,31 @@ if __name__ == "__main__":
 
     logging.info("Simple Pipe: Smoking!")
     logging.info("Simple Pipe: Looking at task list....")
-    tasks = pipe_cfg['pipeline_tasks']
+    tasks = pipe_cfg['task']
     for task in tasks:
-         logging.info(f"Task: {task} type: {tasks[task]}")
+         logging.info(f"- Task: {task} type: {tasks[task]['file_type']}")
     """
         Put the pipeline code below this!
     """
     logging.info("Simple Pipe: Processing Task List")
 
     for task in tasks:
-            logging.info(f"Looking at task: {task} type: {tasks[task]}")
-            task_cfg = pipe_cfg[task]
-            if tasks[task] == "excel":
-                df_excel = get.excel(task_cfg['url'],task_cfg['workbook'],task_cfg['skiprows'],task_cfg['columns'])
+        logging.info(f"Looking at task: {task} type: {tasks[task]['file_type']}")
+        if tasks[task]['file_type'] == "excel":
+            df_excel = get.excel(tasks[task]['url'],tasks[task]['workbook'],tasks[task]['skiprows'],tasks[task]['columns'])
 
-                if df_excel is None:
-                    logging.error(f"{task}: No raw data extracted")
-                    failed_tasks += 1
-
-            else:
-                logging.info(f'Oops problem with the task "{task}". The task type "{tasks[task]}" is not support (yet!)')
+            if df_excel is None:
+                logging.error(f"- {task}: No raw data extracted")
                 failed_tasks += 1
+            else:
+                database.df_load(db_con, df_excel, tasks[task]['sql_table'], sqlwrite = tasks[task]['sql_write']) 
+
+        else:
+            logging.info(f'- Oops problem with the task "{task}". The task type {tasks[task]["file_type"]} is not support (yet!)')
+            failed_tasks += 1
+
+        logging.info(f"Finished processing task: {task}")
+
     if failed_tasks :
       fail_txt = "Oh No!"  
     else:

@@ -1,42 +1,47 @@
-[logging]
-level = "INFO"
-logfile = "log/simple_pipe.log"
-
 [pipeline]
+name = "My_Simple_Pipe"
+description = "My simple pipeline template"
 # Database scheme name raw, staging, production etc
 schema = "raw"
 # local 'duckdb' or remote 'motherduck' 
 database = "duckdb"
 
-[pipeline_tasks]
-# list of pipeline task names and task type 'excel','cvs' etc
-worksheet_a = "excel"
-worksheet_b = "excel"
-date_table = "csv"
+[logging]
+level = "INFO"
+log_folder = "log/"
+logfile = "simple_pipe.log"
 
-[worksheet_a]
+[task.worksheet_a]
+file_type = "excel"
+description = "Extract online google sheet in xlsx format"
 url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQkKSuXlZFBTun7qhgjC2Z1BnenLjHt4Al16MdITaPFlHTfN-vb_Ip42kzki81t8ZPu93gpK-AAoYgj/pub?output=xlsx"
 workbook = "HAPPYAFLOAT TOTAL LOG"
 skiprows = 4
-columns = "a:m"
+columns = "a:k"
 sql_filter = ""
 sql_table = "log_a"
+sql_write = "replace"
 
-[worksheet_b]
+[task.worksheet_b]
+file_type = "excel"
+description = "Extract online google sheet in xlsx format"
 url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQkKSuXlZFBTun7qhgjC2Z1BnenLjHt4Al16MdITaPFlHTfN-vb_Ip42kzki81t8ZPu93gpK-AAoYgj/pub?output=xlsx"
 workbook = "Summer 2019"
 skiprows = 4
 columns = "a:k"
 sql_filter = ""
 sql_table = "log_a"
+sql_write = "append"
 
-[date_table]
+[task.date_table]
+file_type = "csv"
+description = ""
 url = "data/dim_dates.csv"
 sql_filter = ""
 sql_table = "dim_dates"
+sql_write = "replace"
 
 [duckdb.credentials]
 # local duckdb database name. Remote motherduck credentials are stored in secret.toml
+path = "data/"
 database = "simple_pipe.duckdb"
-
-

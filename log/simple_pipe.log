@@ -1,4 +1,36 @@
-14/09/2023 16:36:20 INFO: Simple Pipe: Lighting the fire!
+15/09/2023 00:26:26 INFO: Simple Pipe: Lighting the fire!
 ************************************************************
-14/09/2023 16:36:20 INFO: Pipeline Config: schema: raw , database: duckdb
-14/09/2023 16:36:20 INFO: Connecting to database duckdb: simple_pipe.duckdb 
+15/09/2023 00:26:26 INFO: Found pipeline: My_Simple_Pipe
+15/09/2023 00:26:26 INFO: Pipeline Description: My simple pipeline template
+15/09/2023 00:26:26 INFO: Pipeline Config: schema: raw , database: duckdb
+15/09/2023 00:26:26 INFO: Connecting to database duckdb: simple_pipe.duckdb 
+15/09/2023 00:26:26 INFO: Simple Pipe: Smoking!
+15/09/2023 00:26:26 INFO: Simple Pipe: Looking at task list....
+15/09/2023 00:26:26 INFO: - Task: worksheet_a type: excel
+15/09/2023 00:26:26 INFO: - Task: worksheet_b type: excel
+15/09/2023 00:26:26 INFO: - Task: date_table type: csv
+15/09/2023 00:26:26 INFO: Simple Pipe: Processing Task List
+15/09/2023 00:26:26 INFO: Looking at task: worksheet_a type: excel
+15/09/2023 00:26:33 INFO: - get_excel: Data extracted from excel: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQkKSuXlZFBTun7qhgjC2Z1BnenLjHt4Al16MdITaPFlHTfN-vb_Ip42kzki81t8ZPu93gpK-AAoYgj/pub?output=xlsx" "HAPPYAFLOAT TOTAL LOG"
+15/09/2023 00:26:33 INFO: - get_excel: Data shape: (170, 13)
+15/09/2023 00:26:33 INFO: - SQL: CREATE OR REPLACE TABLE log_a AS SELECT * FROM df_upload
+15/09/2023 00:26:33 INFO: SQL Result: \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510
+\u2502 count_star() \u2502
+\u2502    int64     \u2502
+\u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524
+\u2502          170 \u2502
+\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518
+
+15/09/2023 00:26:33 INFO: Finished processing task: worksheet_a
+15/09/2023 00:26:33 INFO: Looking at task: worksheet_b type: excel
+15/09/2023 00:26:39 INFO: - get_excel: Data extracted from excel: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQkKSuXlZFBTun7qhgjC2Z1BnenLjHt4Al16MdITaPFlHTfN-vb_Ip42kzki81t8ZPu93gpK-AAoYgj/pub?output=xlsx" "Summer 2019"
+15/09/2023 00:26:39 INFO: - get_excel: Data shape: (52, 11)
+15/09/2023 00:26:39 INFO: - SQL: INSERT INTO log_a SELECT * FROM df_upload
+15/09/2023 00:26:39 ERROR: Database connection error: Binder Error: table log_a has 13 columns but 11 values were supplied
+15/09/2023 00:26:39 INFO: Finished processing task: worksheet_b
+15/09/2023 00:26:39 INFO: Looking at task: date_table type: csv
+15/09/2023 00:26:39 INFO: - Oops problem with the task "date_table". The task type csv is not support (yet!)
+15/09/2023 00:26:39 INFO: Finished processing task: date_table
+15/09/2023 00:26:39 INFO: Simple Pipe: Oh No! 1 tasks failed!
+15/09/2023 00:26:39 INFO: Simple Pipe: Smoked!
+************************************************************
