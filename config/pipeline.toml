@@ -5,6 +5,8 @@ description = "My simple pipeline template"
 schema = "raw"
 # local 'duckdb' or remote 'motherduck' 
 database = "duckdb"
+# Are we running locally (laptop) or remotely (github actions)
+local = true
 
 [logging]
 level = "INFO"

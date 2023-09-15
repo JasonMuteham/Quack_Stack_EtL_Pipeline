@@ -44,10 +44,11 @@ if __name__ == "__main__":
     logging.info(f"Pipeline Config: schema: {pipeline['schema']} , database: {pipeline['database']}" )
 
     db_name = pipe_cfg[pipeline['database']]['credentials']['database']
+    db_path = pipe_cfg[pipeline['database']]['credentials']['path']
   
-    logging.info(f"Connecting to database {pipeline['database']}: {db_name} ")
+    logging.info(f"Connecting to database {pipeline['database']}: {db_path}{db_name} ")
     try:
-        db_con = database.connect(pipeline['database'], db_name)
+        db_con = database.connect(pipeline['database'], db_name, dbpath = db_path)
     except Exception as e:
         print(e)
         raise
@@ -72,7 +73,7 @@ if __name__ == "__main__":
                 logging.error(f"- {task}: No raw data extracted")
                 failed_tasks += 1
             else:
-                database.df_load(db_con, df_excel, tasks[task]['sql_table'], sqlwrite = tasks[task]['sql_write']) 
+                database.df_load(db_con, df_excel, tasks[task]['sql_table'], sqlschema = pipeline['schema'], sqlwrite = tasks[task]['sql_write']) 
 
         else:
             logging.info(f'- Oops problem with the task "{task}". The task type {tasks[task]["file_type"]} is not support (yet!)')
