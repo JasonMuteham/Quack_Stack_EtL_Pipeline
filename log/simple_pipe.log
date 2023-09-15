@@ -1,30 +1,30 @@
-15/09/2023 02:30:38 INFO: Simple Pipe: Lighting the fire!
+15/09/2023 02:57:37 INFO: Simple Pipe: Lighting the fire!
 ************************************************************
-15/09/2023 02:30:38 INFO: Found pipeline: My_Simple_Pipe
-15/09/2023 02:30:38 INFO: Pipeline Description: My simple pipeline template
-15/09/2023 02:30:38 INFO: Pipeline Config: schema: raw , database: duckdb
-15/09/2023 02:30:38 INFO: Connecting to database duckdb: data/simple_pipe.duckdb 
-15/09/2023 02:30:38 INFO: Simple Pipe: Smoking!
-15/09/2023 02:30:38 INFO: Simple Pipe: Looking at task list....
-15/09/2023 02:30:38 INFO: - Task: worksheet_a type: excel
-15/09/2023 02:30:38 INFO: - Task: worksheet_b type: excel
-15/09/2023 02:30:38 INFO: - Task: date_table type: csv
-15/09/2023 02:30:38 INFO: Simple Pipe: Processing Task List
-15/09/2023 02:30:38 INFO: Looking at task: worksheet_a type: excel
-15/09/2023 02:30:44 INFO: - get_excel: Data extracted from excel: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQkKSuXlZFBTun7qhgjC2Z1BnenLjHt4Al16MdITaPFlHTfN-vb_Ip42kzki81t8ZPu93gpK-AAoYgj/pub?output=xlsx" "HAPPYAFLOAT TOTAL LOG"
-15/09/2023 02:30:44 INFO: - get_excel: Data shape: (170, 11)
-15/09/2023 02:30:44 INFO: - SQL: CREATE OR REPLACE TABLE raw.log_a AS SELECT * FROM df_upload
-15/09/2023 02:30:44 INFO: - SQL Result: raw.log_a: (170, 11)
-15/09/2023 02:30:44 INFO: Finished processing task: worksheet_a
-15/09/2023 02:30:44 INFO: Looking at task: worksheet_b type: excel
-15/09/2023 02:30:49 INFO: - get_excel: Data extracted from excel: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQkKSuXlZFBTun7qhgjC2Z1BnenLjHt4Al16MdITaPFlHTfN-vb_Ip42kzki81t8ZPu93gpK-AAoYgj/pub?output=xlsx" "Summer 2019"
-15/09/2023 02:30:49 INFO: - get_excel: Data shape: (52, 11)
-15/09/2023 02:30:49 INFO: - SQL: INSERT INTO raw.log_a SELECT * FROM df_upload
-15/09/2023 02:30:49 INFO: - SQL Result: raw.log_a: (222, 11)
-15/09/2023 02:30:49 INFO: Finished processing task: worksheet_b
-15/09/2023 02:30:49 INFO: Looking at task: date_table type: csv
-15/09/2023 02:30:49 INFO: - Oops problem with the task "date_table". The task type csv is not support (yet!)
-15/09/2023 02:30:49 INFO: Finished processing task: date_table
-15/09/2023 02:30:49 INFO: Simple Pipe: Oh No! 1 tasks failed!
-15/09/2023 02:30:49 INFO: Simple Pipe: Smoked!
+15/09/2023 02:57:37 INFO: Found pipeline: My_Simple_Pipe
+15/09/2023 02:57:37 INFO: Pipeline Description: My simple pipeline template
+15/09/2023 02:57:37 INFO: Pipeline Config: schema: raw , database: duckdb
+15/09/2023 02:57:37 INFO: Connecting to database duckdb: data/simple_pipe.duckdb 
+15/09/2023 02:57:37 INFO: Simple Pipe: Smoking!
+15/09/2023 02:57:37 INFO: Simple Pipe: Looking at task list....
+15/09/2023 02:57:37 INFO: - Task: worksheet_a type: excel
+15/09/2023 02:57:37 INFO: - Task: worksheet_b type: excel
+15/09/2023 02:57:37 INFO: - Task: date_table type: csv
+15/09/2023 02:57:37 INFO: Simple Pipe: Processing Task List
+15/09/2023 02:57:37 INFO: Looking at task: worksheet_a type: excel
+15/09/2023 02:57:43 INFO: - get_excel: Data extracted from excel: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQkKSuXlZFBTun7qhgjC2Z1BnenLjHt4Al16MdITaPFlHTfN-vb_Ip42kzki81t8ZPu93gpK-AAoYgj/pub?output=xlsx" "HAPPYAFLOAT TOTAL LOG"
+15/09/2023 02:57:43 INFO: - get_excel: Data shape: (170, 11)
+15/09/2023 02:57:43 INFO: - SQL: CREATE OR REPLACE TABLE raw.log_a AS SELECT * FROM df_upload
+15/09/2023 02:57:43 INFO: - SQL Result: raw.log_a: (170, 11)
+15/09/2023 02:57:43 INFO: Finished processing task: worksheet_a
+15/09/2023 02:57:43 INFO: Looking at task: worksheet_b type: excel
+15/09/2023 02:57:47 INFO: - get_excel: Data extracted from excel: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQkKSuXlZFBTun7qhgjC2Z1BnenLjHt4Al16MdITaPFlHTfN-vb_Ip42kzki81t8ZPu93gpK-AAoYgj/pub?output=xlsx" "Summer 2019"
+15/09/2023 02:57:47 INFO: - get_excel: Data shape: (52, 11)
+15/09/2023 02:57:47 INFO: - SQL: INSERT INTO raw.log_a SELECT * FROM df_upload
+15/09/2023 02:57:47 INFO: - SQL Result: raw.log_a: (222, 11)
+15/09/2023 02:57:47 INFO: Finished processing task: worksheet_b
+15/09/2023 02:57:47 INFO: Looking at task: date_table type: csv
+15/09/2023 02:57:47 INFO: - Oops problem with the task "date_table". The task type csv is not support (yet!)
+15/09/2023 02:57:47 INFO: Finished processing task: date_table
+15/09/2023 02:57:47 INFO: Simple Pipe: Oh No! 1 tasks failed!
+15/09/2023 02:57:47 INFO: Simple Pipe: Smoked!
 ************************************************************

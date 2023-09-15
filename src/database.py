@@ -2,6 +2,7 @@ import duckdb
 import logging
 import tomllib
 from pathlib import Path
+import os
 
 def connect(db, db_name, dbpath = None, local = True):
 
