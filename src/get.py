@@ -9,8 +9,8 @@ def excel(excel_url, excel_workbook, excel_skiprows, excel_usecols):
                             skiprows=excel_skiprows,
                             usecols=excel_usecols) 
     except Exception as e:
-        logging.error(f'get_excel: {excel_url}')        
-        logging.error(f'get_excel: {e}')
+        logging.error(f'- get_excel: {excel_url}')        
+        logging.error(f'- get_excel: {e}')
         return
     else:
         logging.info(f'- get_excel: Data extracted from excel: "{excel_url}" "{excel_workbook}"')
@@ -20,16 +20,15 @@ def excel(excel_url, excel_workbook, excel_skiprows, excel_usecols):
 
 def csv(url: str):
     try:
-        df = pd.read_csv( url) 
+        df = pd.read_csv(url) 
     except Exception as e:
-        logging.error(f'get_csv: {url}')        
-        logging.error(f'get_csv: {e}')
+        logging.error(f'- get_csv: {url}')        
+        logging.error(f'- get_csv: {e}')
         return
     else:
-        logging.info(f'get_csv: Data extracted from csv: "{url}"')
-        logging.info(f'get_csv: Data shape: {df.shape}')
+        logging.info(f'- get_csv: Data extracted from csv: "{url}"')
+        logging.info(f'- get_csv: Data shape: {df.shape}')
 
-    logging.info('get_csv: Finished')
     return df
 
 def csv_raw(url: str):
@@ -61,3 +60,15 @@ def csv_raw(url: str):
     except requests.exceptions.RequestException as err:
         print("OOps: Something Else", err)
         logging.critical(f"OOps: Something Else {err}")
+
+def sqlfilter(conn, df_upload, sqlfilter):
+
+        try:
+            df_upload = conn.sql(sqlfilter).df()
+        except Exception as e:
+            logging.error(f"- Dataframe filter error: {e}")
+            logging.error(f"- SQL Filter: {sqlfilter}")
+            print(e)   
+            return
+        logging.info(f"- SQL filter Result: {df_upload.shape}")
+        return df_upload

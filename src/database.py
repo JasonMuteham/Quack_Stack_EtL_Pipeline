@@ -1,10 +1,9 @@
 import duckdb
 import logging
-import tomllib
 from pathlib import Path
 import os
 
-def connect(db, db_name, dbpath = None, local = True):
+def connect(db, db_name, dbpath = None):
 
     if db == "duckdb":
         try:
@@ -18,26 +17,15 @@ def connect(db, db_name, dbpath = None, local = True):
             logging.error(f"Database connection error: {e}")
             print(e)
     else:
-        if local:
         # Need motherduck code in here
-            try:
-                with open("config/secret.toml", "rb") as f:
-                    shush = tomllib.load(f)['motherduck']['credentials']
-            except Exception as e:
-                print(f"*** Where's the secret pipe? ***\n{e}")
-                raise
+        MOTHERDUCK_DB = os.getenv('MOTHERDUCK_DB')
+        MOTHERDUCK_TOKEN = os.getenv('MOTHERDUCK_TOKEN')
+        try:
+            return duckdb.connect(f"md:{MOTHERDUCK_DB}?{MOTHERDUCK_TOKEN}")
+        except Exception as e:
+            logging.error(f"Database connection error: {e}")
+            print(e)
 
-            try:
-                return duckdb.connect(f"md:{shush['database']}?{shush['token']}")
-            except Exception as e:
-                logging.error(f"Database connection error: {e}")
-                print(e)
-        else:
-            try:
-                return duckdb.connect(f"md:{motherduck.database}?{motherduck.token}")
-            except Exception as e:
-                logging.error(f"Database connection error: {e}")
-                print(e)
 
 
 
@@ -48,6 +36,7 @@ def df_load(conn, df_upload, sqlfile, sqlschema, sqlwrite = "append"):
     except Exception as e:
         logging.error(f"Database connection error: {e}")
         print(e)
+
     try:
         if sqlwrite == "replace":
             sql = f"CREATE OR REPLACE TABLE {sqlschema}.{sqlfile} AS SELECT * FROM df_upload"

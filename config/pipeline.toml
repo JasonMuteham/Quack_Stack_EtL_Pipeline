@@ -3,7 +3,7 @@ name = "My_Simple_Pipe"
 description = "My simple pipeline template"
 # Database scheme name raw, staging, production etc
 schema = "raw"
-# local 'duckdb' or remote 'motherduck' 
+# Database engine local 'duckdb' or remote 'motherduck' 
 database = "duckdb"
 # Are we running locally (laptop) or remotely (github actions)
 local = true
@@ -13,7 +13,18 @@ level = "INFO"
 log_folder = "log/"
 logfile = "simple_pipe.log"
 
+[task.merged_data]
+active = true
+file_type = "csv"
+url = "data/merge_data.csv"
+# SQL filter on the DataFrame df_load eg.
+# sql_filter = 'name_of_filter'
+sql_filter = "log_filter"
+sql_table = "merged_logs"
+sql_write = "replace"
+
 [task.worksheet_a]
+active = false
 file_type = "excel"
 description = "Extract online google sheet in xlsx format"
 url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQkKSuXlZFBTun7qhgjC2Z1BnenLjHt4Al16MdITaPFlHTfN-vb_Ip42kzki81t8ZPu93gpK-AAoYgj/pub?output=xlsx"
@@ -25,6 +36,7 @@ sql_table = "log_a"
 sql_write = "replace"
 
 [task.worksheet_b]
+active = false
 file_type = "excel"
 description = "Extract online google sheet in xlsx format"
 url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQkKSuXlZFBTun7qhgjC2Z1BnenLjHt4Al16MdITaPFlHTfN-vb_Ip42kzki81t8ZPu93gpK-AAoYgj/pub?output=xlsx"
@@ -36,10 +48,11 @@ sql_table = "log_a"
 sql_write = "append"
 
 [task.date_table]
+active = true
 file_type = "csv"
 description = ""
-url = "data/dim_dates.csv"
-sql_filter = ""
+url = "data/date_table.csv"
+sql_filter = "date_select"
 sql_table = "dim_dates"
 sql_write = "replace"
 
@@ -47,3 +60,31 @@ sql_write = "replace"
 # local duckdb database name. Remote motherduck credentials are stored in secret.toml
 path = "data/"
 database = "simple_pipe.duckdb"
+
+#SQL Filter statements, filter the df_upload DataFrame
+[sql.log_filter]
+sql = """
+SELECT  
+        "Date"::DATE as log_date,
+        "Unnamed: 7" as description,
+        split_part("Unnamed: 7", ' to ', 1) as start_port,
+        split_part("Unnamed: 7", ' to ', 2) as end_port,
+        "Hours"::INTEGER as motoring_hours,
+        "Minutes"::INTEGER as motoring_minutes,
+        "Hours.1"::INTEGER as sailing_hours,
+        "Minutes.1"::INTEGER as sailing_minutes,
+        "Nautical Miles"::DECIMAL(5,2) as nautical_miles,
+        IFNULL("Marina"::INTEGER,0) as marina_nights,
+        IFNULL("Anchor"::INTEGER,0) as anchoring_nights,
+        IFNULL("Mooring"::INTEGER,0) as mooring_nights
+FROM df_upload
+WHERE description IS NOT NULL
+ORDER BY log_date
+"""
+
+[sql.date_select]
+sql = """
+SELECT *
+FROM df_upload
+WHERE "date" >= '2020-01-01' and "date" < '2024-01-01'
+"""
