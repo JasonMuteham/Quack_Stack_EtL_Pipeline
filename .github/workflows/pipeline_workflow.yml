@@ -1,4 +1,7 @@
-name: run simple_pipe.py
+# MAKE SURE YOU HAVE A TOKEN IN YOUR REPO SETTINGS
+# GIVE GITHUB ACTIONS WRITE PERMISSIONS TO YOUR REPO OR THERE WILL BE ERRORS AND NO logs
+
+name: run Simple EtL Pipeline
 
 on:
   schedule:
