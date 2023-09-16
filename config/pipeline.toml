@@ -4,7 +4,8 @@ description = "My simple pipeline template"
 # Database scheme name raw, staging, production etc
 schema = "raw"
 # Database engine local 'duckdb' or remote 'motherduck' 
-database = "duckdb"
+#database = "duckdb"
+database = "motherduck"
 # Are we running locally (laptop) or remotely (github actions)
 local = true
 
@@ -60,6 +61,11 @@ sql_write = "replace"
 # local duckdb database name. Remote motherduck credentials are stored in secret.toml
 path = "data/"
 database = "simple_pipe.duckdb"
+
+[motherduck.credentials]
+# local duckdb database name. Remote motherduck credentials are stored in secret.toml
+path = ""
+database = "simple_pipe"
 
 #SQL Filter statements, filter the df_upload DataFrame
 [sql.log_filter]

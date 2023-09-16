@@ -33,10 +33,9 @@ def connect(db, db_name, dbpath=None):
             print(e)
     else:
         # Need motherduck code in here
-        MOTHERDUCK_DB = os.getenv("MOTHERDUCK_DB")
         MOTHERDUCK_TOKEN = os.getenv("MOTHERDUCK_TOKEN")
         try:
-            return duckdb.connect(f"md:{MOTHERDUCK_DB}?{MOTHERDUCK_TOKEN}")
+            return duckdb.connect(f"md:{db_name}?{MOTHERDUCK_TOKEN}")
         except Exception as e:
             logging.error(f"Database connection error: {e}")
             print(e)

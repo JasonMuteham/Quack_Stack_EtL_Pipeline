@@ -48,8 +48,10 @@ if __name__ == "__main__":
         f"Pipeline Config: schema: {pipeline['schema']} , database engine: {pipeline['database']}"
     )
 
+
     db_name = pipe_cfg[pipeline["database"]]["credentials"]["database"]
     db_path = pipe_cfg[pipeline["database"]]["credentials"]["path"]
+
 
     logging.info(f"Connecting to database {pipeline['database']}: {db_path}{db_name} ")
     try:

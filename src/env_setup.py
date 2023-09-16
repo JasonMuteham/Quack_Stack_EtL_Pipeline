@@ -3,7 +3,7 @@ import tomllib
 
 
 def load():
-    MOTHERDUCK_TOKEN = os.getenv("MOTHERDUCK_TOKEN")  # noqa: F841
+    MOTHERDUCK_TOKEN = os.getenv("MOTHERDUCK_TOKEN") 
 
     if MOTHERDUCK_TOKEN is None:
         # Set environment variables
@@ -14,5 +14,4 @@ def load():
             print(f"*** Can not find the secret hiding place! ***\n{e}")
             raise
 
-        os.environ["MOTHERDUCK_DB"] = shush["MOTHERDUCK_DB"]
         os.environ["MOTHERDUCK_TOKEN"] = shush["MOTHERDUCK_TOKEN"]

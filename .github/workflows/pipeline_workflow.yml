@@ -4,8 +4,7 @@ on:
   schedule:
     - cron: '0 0 * * 1' # At 00:00 on Monday
 env:
-  MOTHERDUCK_DB: ${{ secrets.MOTHERDUCK_DB }}
-  MOTHERDUCK_TOKEN: ${{ secrets.MOTHERDUCK_TOKEN }}
+  MOTHERDUCK_TOKEN: ${{ secrets.MOTHERDUCK_TOKEN }} # set up your MOTHERDUCK_TOKEN secret token in repository settings
 jobs:
   run_pipeline:
     runs-on: ubuntu-latest
