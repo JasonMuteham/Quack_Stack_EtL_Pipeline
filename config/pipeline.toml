@@ -4,10 +4,8 @@ description = "My simple pipeline template"
 # Database scheme name raw, staging, production etc
 schema = "raw"
 # Database engine local 'duckdb' or remote 'motherduck' 
-#database = "duckdb"
-database = "motherduck"
-# Are we running locally (laptop) or remotely (github actions)
-local = true
+database = "duckdb"
+#database = "motherduck"
 
 [logging]
 level = "INFO"
@@ -15,7 +13,7 @@ log_folder = "log/"
 logfile = "simple_pipe.log"
 
 [task.merged_data]
-active = true
+active = false
 file_type = "csv"
 url = "data/merge_data.csv"
 # SQL filter on the DataFrame df_load eg.
@@ -28,11 +26,11 @@ sql_write = "replace"
 active = false
 file_type = "excel"
 description = "Extract online google sheet in xlsx format"
-url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQkKSuXlZFBTun7qhgjC2Z1BnenLjHt4Al16MdITaPFlHTfN-vb_Ip42kzki81t8ZPu93gpK-AAoYgj/pub?output=xlsx"
-workbook = "HAPPYAFLOAT TOTAL LOG"
+url = "https://docs.google.com/spreadsheets/??????????"
+workbook = "workbook name"
 skiprows = 4
 columns = "a:k"
-sql_filter = ""
+sql_filter = "log_filter"
 sql_table = "log_a"
 sql_write = "replace"
 
@@ -40,16 +38,16 @@ sql_write = "replace"
 active = false
 file_type = "excel"
 description = "Extract online google sheet in xlsx format"
-url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQkKSuXlZFBTun7qhgjC2Z1BnenLjHt4Al16MdITaPFlHTfN-vb_Ip42kzki81t8ZPu93gpK-AAoYgj/pub?output=xlsx"
-workbook = "Summer 2019"
+url = "https://docs.google.com/spreadsheets/??????????"
+workbook = "another workbook name"
 skiprows = 4
 columns = "a:k"
-sql_filter = ""
+sql_filter = "log_filter"
 sql_table = "log_a"
 sql_write = "append"
 
 [task.date_table]
-active = true
+active = false
 file_type = "csv"
 description = ""
 url = "data/date_table.csv"
