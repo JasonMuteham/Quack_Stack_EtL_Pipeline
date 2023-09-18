@@ -43,7 +43,7 @@ file_type = "csv"
 
 description = "Load csv file"
 
-url = "data/my_data.csv"
+url = "data/my_data.csv" # local path or url
 
 sql_filter = "my_filter" # which sql statement to run, configured below. 
 

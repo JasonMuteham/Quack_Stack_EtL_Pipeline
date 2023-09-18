@@ -31,6 +31,15 @@ def csv(url: str):
 
     return df
 
+def csv_filelist(url: str):
+    filelist = csv(url)
+    df1 = pd.DataFrame()
+    for file in filelist['url']:
+        df2 = csv(file)
+        if df2 is not None:
+            df1 = pd.concat([df1,df2])
+    return df1
+
 def csv_raw(url: str):
     """
     Extract raw data from a URL

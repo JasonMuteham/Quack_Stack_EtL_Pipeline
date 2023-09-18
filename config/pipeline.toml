@@ -1,6 +1,6 @@
 [pipeline]
 name = "My_Simple_Pipe"
-description = "My simple pipeline template"
+description = "My simple pipeline template - Lego Bricks sample database"
 # Database scheme name raw, staging, production etc
 schema = "raw"
 # Database engine local 'duckdb' or remote 'motherduck' 
@@ -9,56 +9,123 @@ database = "duckdb"
 
 [logging]
 level = "INFO"
-log_folder = "log/"
+log_folder = "log"
 logfile = "simple_pipe.log"
 
-[task.merged_data]
-active = false
+[task.color_data]
+active = true
 file_type = "csv"
-description = "Load csv file"
-url = "data/merge_data.csv"
-# SQL filter on the DataFrame df_load eg.
-# sql_filter = 'name_of_filter'
-sql_filter = "log_filter"
-sql_table = "merged_logs"
+description = "Load colors.csv file"
+url = "data/LegoBricks/colors.csv"
+sql_filter = ""
+sql_table = "colours"
 sql_write = "replace"
 
-[task.worksheet_a]
-active = false
-file_type = "excel"
-description = "Extract online google sheet in xlsx format"
-url = "https://docs.google.com/spreadsheets/??????????"
-workbook = "workbook name"
-skiprows = 4
-columns = "a:k"
-sql_filter = "log_filter"
-sql_table = "log_a"
+[task.elements_data]
+active = true
+file_type = "csv.filelist"
+description = "Process a .cvs file with a list of urls, in this case elements"
+url = "data/LegoBricks/elements_urls.csv"
+sql_filter = "elements"
+sql_table = "elements"
 sql_write = "replace"
 
-[task.worksheet_b]
-active = false
-file_type = "excel"
-description = "Extract online google sheet in xlsx format"
-url = "https://docs.google.com/spreadsheets/??????????"
-workbook = "another workbook name"
-skiprows = 4
-columns = "a:k"
-sql_filter = "log_filter"
-sql_table = "log_a"
-sql_write = "append"
-
-[task.date_table]
-active = false
+[task.inventories_data]
+active = true
 file_type = "csv"
-description = ""
-url = "data/date_table.csv"
-sql_filter = "date_select"
-sql_table = "dim_dates"
+description = "Load inventories.csv file"
+url = "data/LegoBricks/inventories.csv"
+sql_filter = ""
+sql_table = "inventories"
+sql_write = "replace"
+
+[task.inventory_minifigs_data]
+active = true
+file_type = "csv"
+description = "Load inventory_minifigs.csv file"
+url = "data/LegoBricks/inventory_minifigs.csv"
+sql_filter = ""
+sql_table = "inventory_minifigs"
+sql_write = "replace"
+
+[task.inventory_parts_data]
+active = true
+file_type = "csv"
+description = "Load inventory_parts.csv file"
+url = "data/LegoBricks/inventory_parts.csv"
+sql_filter = "inventory_parts"
+sql_table = "inventory_parts"
+sql_write = "replace"
+
+[task.inventory_sets_data]
+active = true
+file_type = "csv"
+description = "Load inventory_sets.csv file"
+url = "data/LegoBricks/inventory_sets.csv"
+sql_filter = ""
+sql_table = "inventory_sets"
+sql_write = "replace"
+
+[task.minifigs_data]
+active = true
+file_type = "csv"
+description = "Load minifigs.csv file"
+url = "data/LegoBricks/minifigs.csv"
+sql_filter = ""
+sql_table = "minifigs"
+sql_write = "replace"
+
+[task.worksheet_part_categories]
+active = true
+file_type = "excel"
+description = "Extract part_categories from online google sheet in xlsx format"
+url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSRopkzwpUEk9CeRA9AS09ln8YxbJ_7c28BbXCzBvW15OLEPkGlVPBzF8LQCLInvYfjE6LEw__LSorl/pub?output=xlsx"
+workbook = "Part Categories"
+skiprows = 4
+columns = "a:b"
+sql_filter = ""
+sql_table = "part_categories"
+sql_write = "replace"
+
+[task.part_relationships_data]
+active = true
+file_type = "csv"
+description = "Load part_relationships.csv file"
+url = "data/LegoBricks/part_relationships.csv"
+sql_filter = ""
+sql_table = "part_relationships"
+sql_write = "replace"
+
+[task.parts_data]
+active = true
+file_type = "csv"
+description = "Load parts.csv file"
+url = "data/LegoBricks/parts.csv"
+sql_filter = ""
+sql_table = "parts"
+sql_write = "replace"
+
+[task.sets_data]
+active = true
+file_type = "csv"
+description = "Load sets.csv file"
+url = "data/LegoBricks/sets.csv"
+sql_filter = ""
+sql_table = "sets"
+sql_write = "replace"
+
+[task.themes_data]
+active = true
+file_type = "csv"
+description = "Load themes.csv file"
+url = "data/LegoBricks/themes.csv"
+sql_filter = ""
+sql_table = "themes"
 sql_write = "replace"
 
 [duckdb.credentials]
 # local duckdb database name. Remote motherduck credentials are stored in secret.toml
-path = "data/"
+path = "data"
 database = "simple_pipe.duckdb"
 
 [motherduck.credentials]
@@ -67,29 +134,24 @@ path = ""
 database = "simple_pipe"
 
 #SQL Filter statements, filter the df_upload DataFrame
-[sql.log_filter]
+[sql.elements]
 sql = """
-SELECT  
-        "Date"::DATE as log_date,
-        "Unnamed: 7" as description,
-        split_part("Unnamed: 7", ' to ', 1) as start_port,
-        split_part("Unnamed: 7", ' to ', 2) as end_port,
-        "Hours"::INTEGER as motoring_hours,
-        "Minutes"::INTEGER as motoring_minutes,
-        "Hours.1"::INTEGER as sailing_hours,
-        "Minutes.1"::INTEGER as sailing_minutes,
-        "Nautical Miles"::DECIMAL(5,2) as nautical_miles,
-        IFNULL("Marina"::INTEGER,0) as marina_nights,
-        IFNULL("Anchor"::INTEGER,0) as anchoring_nights,
-        IFNULL("Mooring"::INTEGER,0) as mooring_nights
-FROM df_upload
-WHERE description IS NOT NULL
-ORDER BY log_date
+        SELECT
+                "element_id",
+                "part_num",
+                "color_id" AS "colour_id"
+        FROM df_upload
 """
 
-[sql.date_select]
-sql = """
-SELECT *
-FROM df_upload
-WHERE "date" >= '2020-01-01' and "date" < '2024-01-01'
+[sql.inventory_parts]
+sql ="""
+        SELECT
+                "inventory_id",
+                "part_num",
+                "color_id" AS "colour_id",
+                "quantity",
+                "is_spare",
+                "img_url"
+        FROM df_upload
 """
+

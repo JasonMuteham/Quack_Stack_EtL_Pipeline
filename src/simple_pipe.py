@@ -18,12 +18,14 @@ if __name__ == "__main__":
 
     log_file = pipe_cfg["logging"]["logfile"]
     log_path = pipe_cfg["logging"]["log_folder"]
-    log_file = log_path + log_file
-    try:
-        Path(log_path).mkdir(exist_ok=True)
-    except Exception as e:
-        print(e)
-        raise
+   
+    if log_path: 
+        log_file = f"{log_path}/{log_file}"
+        try:
+            Path(log_path).mkdir(exist_ok=True)
+        except Exception as e:
+            print(e)
+            raise
 
     print(f"Making notes in {log_file}")
 
@@ -53,9 +55,9 @@ if __name__ == "__main__":
     db_path = pipe_cfg[pipeline["database"]]["credentials"]["path"]
 
 
-    logging.info(f"Connecting to database {pipeline['database']}: {db_path}{db_name} ")
+    logging.info(f"Connecting to database {pipeline['database']}: {db_path}/{db_name} ")
     try:
-        db_con = database.connect(pipeline["database"], db_name, dbpath=db_path)
+        db_con = database.connect(pipeline["database"], db_name, db_path=db_path)
     except Exception as e:
         print(e)
         raise
@@ -75,6 +77,12 @@ if __name__ == "__main__":
         if tasks[task]["active"]:
             logging.info(f"Looking at task: {task} type: {tasks[task]['file_type']}")
 
+            sql_table = tasks[task]["sql_table"]
+            sql_filter_name = tasks[task]["sql_filter"]
+            if sql_filter_name:
+                sql_filter = pipe_cfg["sql"][sql_filter_name]["sql"]
+            sql_write = tasks[task]["sql_write"]
+
             if tasks[task]["file_type"] == "excel":
                 df_upload = get.excel(
                     tasks[task]["url"],
@@ -86,36 +94,38 @@ if __name__ == "__main__":
             elif tasks[task]["file_type"] == "csv":
                 df_upload = get.csv(tasks[task]["url"])
 
+            elif tasks[task]["file_type"] == "csv.filelist":
+                df_upload = get.csv_filelist(tasks[task]["url"])
+
             else:
                 logging.info(
                     f'- Oops problem with the task "{task}". The task type {tasks[task]["file_type"]} is not support (yet!)'
                 )
                 failed_tasks += 1
+                df_upload = None
 
-            if df_upload is None:
+            if df_upload.empty:
                 logging.error(f"- {task}: No raw data extracted")
                 failed_tasks += 1
             else:
-                sql_table = tasks[task]["sql_table"]
-                sql_filter_name = tasks[task]["sql_filter"]
-                if sql_filter_name:
-                    sql_filter = pipe_cfg["sql"][sql_filter_name]["sql"]
-                sql_write = tasks[task]["sql_write"]
 
                 if sql_filter_name:
                     logging.info(f"- SQL filtering: {sql_filter_name}")
                     df_upload = get.sqlfilter(db_con, df_upload, sql_filter)
                     if df_upload is None:
+                        logging.error(f"- {sql_filter_name}: Returned no data!")
+                        df_upload = pd.DataFrame()
                         failed_tasks +=1
-
-                database.df_load(
-                    db_con,
-                    df_upload,
-                    sql_table,
-                    sqlschema=pipeline["schema"],
-                    sqlwrite=sql_write,
-                )
-
+    
+                if not(df_upload.empty):
+                    database.df_load(
+                        db_con,
+                        df_upload,
+                        sql_table,
+                        sqlschema=pipeline["schema"],
+                        sqlwrite=sql_write,
+                    )
+ 
             logging.info(f"Finished processing task: {task}")
 
     if failed_tasks:
