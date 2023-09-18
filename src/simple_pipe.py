@@ -65,7 +65,7 @@ if __name__ == "__main__":
     tasks = pipe_cfg["task"]
     for task in tasks:
         if tasks[task]["active"]:
-            logging.info(f"- Task: {task} type: {tasks[task]['file_type']}")
+            logging.info(f"- Task: {task} - {tasks[task]['description']}")
 
     logging.info("Simple Pipe: Processing Task List")
 

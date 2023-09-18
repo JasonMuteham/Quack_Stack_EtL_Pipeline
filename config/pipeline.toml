@@ -15,6 +15,7 @@ logfile = "simple_pipe.log"
 [task.merged_data]
 active = false
 file_type = "csv"
+description = "Load csv file"
 url = "data/merge_data.csv"
 # SQL filter on the DataFrame df_load eg.
 # sql_filter = 'name_of_filter'
