@@ -66,6 +66,8 @@ if __name__ == "__main__":
     for task in tasks:
         if tasks[task]["active"]:
             logging.info(f"- Task: {task} - {tasks[task]['description']}")
+        else:
+            logging.info(f"- Skipping Task: {task} - {tasks[task]['description']}")
 
     logging.info("Simple Pipe: Processing Task List")
 
