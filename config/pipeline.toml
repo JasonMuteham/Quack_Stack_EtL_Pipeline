@@ -4,8 +4,8 @@ description = "My simple pipeline template - Lego Bricks sample database"
 # Database scheme name raw, staging, production etc
 schema = "raw"
 # Database engine local 'duckdb' or remote 'motherduck' 
-#database = "duckdb"
-database = "motherduck"
+database = "duckdb"
+#database = "motherduck"
 
 [logging]
 level = "INFO"

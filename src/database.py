@@ -2,8 +2,9 @@ import duckdb
 import logging
 from pathlib import Path
 import os
+from tenacity import retry, stop_after_attempt, wait_fixed
 
-
+@retry(stop=stop_after_attempt(3), wait=wait_fixed(2))
 def connect(db, db_name, db_path=None):
     """
     Connects to a database and returns a connection object.
@@ -27,12 +28,13 @@ def connect(db, db_name, db_path=None):
                 Path(db_path).mkdir(exist_ok=True)
             except Exception as e:
                 logging.critical(f"Can not create folder {db_path}")
-                raise
+                raise e
         try:
             return duckdb.connect(f"{db_name}")
         except Exception as e:
             logging.error(f"Database connection error: {e}")
             print(e)
+            raise e
     else:
         # Need motherduck code in here
         MOTHERDUCK_TOKEN = os.getenv("MOTHERDUCK_TOKEN")
@@ -41,8 +43,9 @@ def connect(db, db_name, db_path=None):
         except Exception as e:
             logging.error(f"Database connection error: {e}")
             print(e)
+            raise e
 
-
+@retry(stop=stop_after_attempt(3), wait=wait_fixed(2))
 def df_load(conn, df_upload, sqlfile, sqlschema, sqlwrite="append"):
     try:
         sql = f"CREATE SCHEMA IF NOT EXISTS {sqlschema}"
@@ -50,6 +53,7 @@ def df_load(conn, df_upload, sqlfile, sqlschema, sqlwrite="append"):
     except Exception as e:
         logging.error(f"Database connection error: {e}")
         print(e)
+        raise e
 
     try:
         if sqlwrite == "replace":
@@ -66,3 +70,4 @@ def df_load(conn, df_upload, sqlfile, sqlschema, sqlwrite="append"):
     except Exception as e:
         logging.error(f"Database connection error: {e}")
         print(e)
+        raise e

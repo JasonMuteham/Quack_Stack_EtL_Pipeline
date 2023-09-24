@@ -1,4 +1,5 @@
 from pathlib import Path
+import pandas as pd
 import get
 import database
 import env_setup
@@ -6,7 +7,7 @@ import logging
 import tomllib
 
 if __name__ == "__main__":
-    print("Searching for my pipe....")
+    print(f"{'*'*50}\nSearching for my pipe....")
     failed_tasks = 0
 
     try:
@@ -18,7 +19,8 @@ if __name__ == "__main__":
 
     log_file = pipe_cfg["logging"]["logfile"]
     log_path = pipe_cfg["logging"]["log_folder"]
-   
+    print("Searching for something to write on...")
+
     if log_path: 
         log_file = f"{log_path}/{log_file}"
         try:
@@ -27,7 +29,7 @@ if __name__ == "__main__":
             print(e)
             raise
 
-    print(f"Making notes in {log_file}")
+    print(f"Making notes... {log_file}")
 
     logging.basicConfig(
         filename=log_file,
@@ -37,7 +39,7 @@ if __name__ == "__main__":
         filemode="w",
     )
     logging.info(f"Simple Pipe: Lighting the fire!\n{'*'*100}")
-    print("Lighting my pipe...")
+    print("Lighting the pipe...")
 
     pipeline = pipe_cfg["pipeline"]
     logging.info(f'Found pipeline: {pipeline["name"]}')
@@ -76,7 +78,8 @@ if __name__ == "__main__":
     for task in tasks:
         if tasks[task]["active"]:
             logging.info(f"Looking at task: {task} type: {tasks[task]['file_type']}")
-
+            no_load = False
+            df_load = pd.DataFrame()
             sql_table = tasks[task]["sql_table"]
             sql_filter_name = tasks[task]["sql_filter"]
             if sql_filter_name:
@@ -99,32 +102,33 @@ if __name__ == "__main__":
 
             else:
                 logging.info(
-                    f'- Oops problem with the task "{task}". The task type {tasks[task]["file_type"]} is not support (yet!)'
+                    f'- Oops problem with the task "{task}". The task type {tasks[task]["file_type"]} is not support (yet!)'  # noqa: E501
                 )
                 failed_tasks += 1
-                df_upload = None
+                no_load = True
 
             if df_upload.empty:
-                logging.error(f"- {task}: No raw data extracted")
+                logging.warning(f"- {task}: No raw data extracted")
                 failed_tasks += 1
             else:
-
                 if sql_filter_name:
                     logging.info(f"- SQL filtering: {sql_filter_name}")
                     df_upload = get.sqlfilter(db_con, df_upload, sql_filter)
-                    if df_upload is None:
-                        logging.error(f"- {sql_filter_name}: Returned no data!")
-                        df_upload = pd.DataFrame()
-                        failed_tasks +=1
-    
-                if not(df_upload.empty):
-                    database.df_load(
-                        db_con,
-                        df_upload,
-                        sql_table,
-                        sqlschema=pipeline["schema"],
-                        sqlwrite=sql_write,
-                    )
+                    if df_upload.empty:
+                        logging.warning(f"- {sql_filter_name}: Returned no data!")
+                        failed_tasks += 1
+
+            if (df_upload.empty):
+                no_load = True
+
+            if not(no_load):
+                database.df_load(
+                    db_con,
+                    df_upload,                        
+                    sql_table,
+                    sqlschema=pipeline["schema"],
+                    sqlwrite=sql_write
+                )
  
             logging.info(f"Finished processing task: {task}")
 
@@ -133,7 +137,7 @@ if __name__ == "__main__":
     else:
         fail_txt = "Yay!"
 
-    print(f"{fail_txt} Pipe went out this many times: {failed_tasks}")
+    print(f"{fail_txt} Pipe went out {failed_tasks} times!")
     logging.info(f"Simple Pipe: {fail_txt} {failed_tasks} tasks failed!")
     logging.info(f"Simple Pipe: Smoked!\n{'*'*100}")
-    print("Yay! Pipe smoked!")
+    print(f"Pipe smoked!\n{'*'*50}")
