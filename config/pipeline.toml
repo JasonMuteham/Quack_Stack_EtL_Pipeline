@@ -75,6 +75,15 @@ sql_filter = ""
 sql_table = "minifigs"
 sql_write = "replace"
 
+[task.worksheet_part_categories_csv]
+active = true
+file_type = "csv.duck"
+description = "Extract part_categories from online google sheet in csv format"
+url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSRopkzwpUEk9CeRA9AS09ln8YxbJ_7c28BbXCzBvW15OLEPkGlVPBzF8LQCLInvYfjE6LEw__LSorl/pub?gid=1097541840&single=true&output=csv"
+sql_filter = ""
+sql_table = "part_categories"
+sql_write = "replace"
+
 [task.worksheet_part_categories]
 active = false
 file_type = "excel"
