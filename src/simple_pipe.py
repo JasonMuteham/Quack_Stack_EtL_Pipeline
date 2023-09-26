@@ -5,6 +5,7 @@ import database
 import env_setup
 import logging
 import tomllib
+import myduck
 
 if __name__ == "__main__":
     print(f"{'*'*50}\nSearching for my pipe....")
@@ -59,14 +60,23 @@ if __name__ == "__main__":
 
     logging.info(f"Connecting to database {pipeline['database']}: {db_path}/{db_name} ")
     try:
-        db_con = database.connect(pipeline["database"], db_name, db_path=db_path)
+        db_con = myduck.connect(pipeline["database"], db_name, db_path=db_path)
     except Exception as e:
         print(e)
         raise
+    else:
+        logging.info("Checking duckdb extensions.")
+        myduck.checkdb(db_con)
+
+        logging.info("Checking duckdb schema: staging")
+        myduck.schema(db_con,"staging")
+        logging.info(f"Checking duckdb schema: {pipeline['schema']}")
+        myduck.schema(db_con, pipeline['schema'])
 
     logging.info("Simple Pipe: Smoking!")
     logging.info("Simple Pipe: Looking at task list....")
     tasks = pipe_cfg["task"]
+
     for task in tasks:
         if tasks[task]["active"]:
             logging.info(f"- Task: {task} - {tasks[task]['description']}")
@@ -79,7 +89,8 @@ if __name__ == "__main__":
         if tasks[task]["active"]:
             logging.info(f"Looking at task: {task} type: {tasks[task]['file_type']}")
             no_load = False
-            df_load = pd.DataFrame()
+            duck_load = False
+            df_upload = pd.DataFrame()
             sql_table = tasks[task]["sql_table"]
             sql_filter_name = tasks[task]["sql_filter"]
             if sql_filter_name:
@@ -100,6 +111,13 @@ if __name__ == "__main__":
             elif tasks[task]["file_type"] == "csv.filelist":
                 df_upload = get.csv_filelist(tasks[task]["url"])
 
+            elif tasks[task]["file_type"] == "csv.duck":
+                url=tasks[task]["url"]
+                myduck.csv(db_con, url, sql_table, schema="staging", replace=True)
+                myduck.load(db_con,sql_table,pipeline["schema"], schema_from="staging",sql_write=sql_write)
+                no_load = True
+                duck_load = True
+
             else:
                 logging.info(
                     f'- Oops problem with the task "{task}". The task type {tasks[task]["file_type"]} is not support (yet!)'  # noqa: E501
@@ -107,7 +125,7 @@ if __name__ == "__main__":
                 failed_tasks += 1
                 no_load = True
 
-            if df_upload.empty:
+            if df_upload.empty and not(duck_load):
                 logging.warning(f"- {task}: No raw data extracted")
                 failed_tasks += 1
             else:

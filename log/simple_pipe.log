@@ -1,105 +1,53 @@
-24/09/2023 18:04:08 INFO: Simple Pipe: Lighting the fire!
+26/09/2023 17:08:38 INFO: Simple Pipe: Lighting the fire!
 ****************************************************************************************************
-24/09/2023 18:04:08 INFO: Found pipeline: My_Simple_Pipe
-24/09/2023 18:04:08 INFO: Pipeline Description: My simple pipeline template - Lego Bricks sample database
-24/09/2023 18:04:08 INFO: Loading environment variables
-24/09/2023 18:04:08 INFO: Pipeline Config: schema: raw , database engine: duckdb
-24/09/2023 18:04:08 INFO: Connecting to database duckdb: data/simple_pipe.duckdb 
-24/09/2023 18:04:08 INFO: Simple Pipe: Smoking!
-24/09/2023 18:04:08 INFO: Simple Pipe: Looking at task list....
-24/09/2023 18:04:08 INFO: - Task: color_data - Load colors.csv file
-24/09/2023 18:04:08 INFO: - Task: elements_data - Process a .cvs file with a list of urls, in this case elements
-24/09/2023 18:04:08 INFO: - Task: inventories_data - Load inventories.csv file
-24/09/2023 18:04:08 INFO: - Task: inventory_minifigs_data - Load inventory_minifigs.csv file
-24/09/2023 18:04:08 INFO: - Task: inventory_parts_data - Load inventory_parts.csv file
-24/09/2023 18:04:08 INFO: - Task: inventory_sets_data - Load inventory_sets.csv file
-24/09/2023 18:04:08 INFO: - Task: minifigs_data - Load minifigs.csv file
-24/09/2023 18:04:08 INFO: - Task: worksheet_part_categories - Extract part_categories from online google sheet in xlsx format
-24/09/2023 18:04:08 INFO: - Task: part_relationships_data - Load part_relationships.csv file
-24/09/2023 18:04:08 INFO: - Task: parts_data - Load parts.csv file
-24/09/2023 18:04:08 INFO: - Task: sets_data - Load sets.csv file
-24/09/2023 18:04:08 INFO: - Task: themes_data - Load themes.csv file
-24/09/2023 18:04:08 INFO: Simple Pipe: Processing Task List
-24/09/2023 18:04:08 INFO: Looking at task: color_data type: csv
-24/09/2023 18:04:08 INFO: - get_csv: Data extracted from csv: "data/LegoBricks/colors.csv"
-24/09/2023 18:04:08 INFO: - get_csv: Data shape: (217, 4)
-24/09/2023 18:04:08 INFO: - SQL: CREATE OR REPLACE TABLE raw.colours AS SELECT * FROM df_upload
-24/09/2023 18:04:08 INFO: - Verifying Uploaded Data - Result: raw.colours: (217, 4)
-24/09/2023 18:04:08 INFO: Finished processing task: color_data
-24/09/2023 18:04:08 INFO: Looking at task: elements_data type: csv.filelist
-24/09/2023 18:04:08 INFO: - get_csv: Data extracted from csv: "data/LegoBricks/elements_urls.csv"
-24/09/2023 18:04:08 INFO: - get_csv: Data shape: (2, 1)
-24/09/2023 18:04:08 INFO: - get_csv: Data extracted from csv: "data/LegoBricks/elements_a.csv"
-24/09/2023 18:04:08 INFO: - get_csv: Data shape: (9577, 3)
-24/09/2023 18:04:09 INFO: - get_csv: Data extracted from csv: "data/LegoBricks/elements_b.csv"
-24/09/2023 18:04:09 INFO: - get_csv: Data shape: (64591, 3)
-24/09/2023 18:04:09 INFO: - SQL filtering: elements
-24/09/2023 18:04:09 INFO: - SQL filter Result: (74168, 3)
-24/09/2023 18:04:09 INFO: - SQL: CREATE OR REPLACE TABLE raw.elements AS SELECT * FROM df_upload
-24/09/2023 18:04:09 INFO: - Verifying Uploaded Data - Result: raw.elements: (74168, 3)
-24/09/2023 18:04:09 INFO: Finished processing task: elements_data
-24/09/2023 18:04:09 INFO: Looking at task: inventories_data type: csv
-24/09/2023 18:04:09 INFO: - get_csv: Data extracted from csv: "data/LegoBricks/inventories.csv"
-24/09/2023 18:04:09 INFO: - get_csv: Data shape: (34614, 3)
-24/09/2023 18:04:09 INFO: - SQL: CREATE OR REPLACE TABLE raw.inventories AS SELECT * FROM df_upload
-24/09/2023 18:04:09 INFO: - Verifying Uploaded Data - Result: raw.inventories: (34614, 3)
-24/09/2023 18:04:09 INFO: Finished processing task: inventories_data
-24/09/2023 18:04:09 INFO: Looking at task: inventory_minifigs_data type: csv
-24/09/2023 18:04:09 INFO: - get_csv: Data extracted from csv: "data/LegoBricks/inventory_minifigs.csv"
-24/09/2023 18:04:09 INFO: - get_csv: Data shape: (19213, 3)
-24/09/2023 18:04:09 INFO: - SQL: CREATE OR REPLACE TABLE raw.inventory_minifigs AS SELECT * FROM df_upload
-24/09/2023 18:04:09 INFO: - Verifying Uploaded Data - Result: raw.inventory_minifigs: (19213, 3)
-24/09/2023 18:04:09 INFO: Finished processing task: inventory_minifigs_data
-24/09/2023 18:04:09 INFO: Looking at task: inventory_parts_data type: csv
-24/09/2023 18:04:14 INFO: - get_csv: Data extracted from csv: "data/LegoBricks/inventory_parts.csv"
-24/09/2023 18:04:14 INFO: - get_csv: Data shape: (1076738, 6)
-24/09/2023 18:04:14 INFO: - SQL filtering: inventory_parts
-24/09/2023 18:04:17 INFO: - SQL filter Result: (1076738, 6)
-24/09/2023 18:04:17 INFO: - SQL: CREATE OR REPLACE TABLE raw.inventory_parts AS SELECT * FROM df_upload
-24/09/2023 18:04:26 INFO: - Verifying Uploaded Data - Result: raw.inventory_parts: (1076738, 6)
-24/09/2023 18:04:26 INFO: Finished processing task: inventory_parts_data
-24/09/2023 18:04:26 INFO: Looking at task: inventory_sets_data type: csv
-24/09/2023 18:04:26 INFO: - get_csv: Data extracted from csv: "data/LegoBricks/inventory_sets.csv"
-24/09/2023 18:04:26 INFO: - get_csv: Data shape: (3986, 3)
-24/09/2023 18:04:26 INFO: - SQL: CREATE OR REPLACE TABLE raw.inventory_sets AS SELECT * FROM df_upload
-24/09/2023 18:04:26 INFO: - Verifying Uploaded Data - Result: raw.inventory_sets: (3986, 3)
-24/09/2023 18:04:26 INFO: Finished processing task: inventory_sets_data
-24/09/2023 18:04:26 INFO: Looking at task: minifigs_data type: csv
-24/09/2023 18:04:26 INFO: - get_csv: Data extracted from csv: "data/LegoBricks/minifigs.csv"
-24/09/2023 18:04:26 INFO: - get_csv: Data shape: (12661, 4)
-24/09/2023 18:04:26 INFO: - SQL: CREATE OR REPLACE TABLE raw.minifigs AS SELECT * FROM df_upload
-24/09/2023 18:04:27 INFO: - Verifying Uploaded Data - Result: raw.minifigs: (12661, 4)
-24/09/2023 18:04:27 INFO: Finished processing task: minifigs_data
-24/09/2023 18:04:27 INFO: Looking at task: worksheet_part_categories type: excel
-24/09/2023 18:04:30 INFO: - get_excel: Data extracted from excel: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSRopkzwpUEk9CeRA9AS09ln8YxbJ_7c28BbXCzBvW15OLEPkGlVPBzF8LQCLInvYfjE6LEw__LSorl/pub?output=xlsx" "Part Categories"
-24/09/2023 18:04:30 INFO: - get_excel: Data shape: (65, 2)
-24/09/2023 18:04:30 INFO: - SQL: CREATE OR REPLACE TABLE raw.part_categories AS SELECT * FROM df_upload
-24/09/2023 18:04:30 INFO: - Verifying Uploaded Data - Result: raw.part_categories: (65, 2)
-24/09/2023 18:04:30 INFO: Finished processing task: worksheet_part_categories
-24/09/2023 18:04:30 INFO: Looking at task: part_relationships_data type: csv
-24/09/2023 18:04:30 INFO: - get_csv: Data extracted from csv: "data/LegoBricks/part_relationships.csv"
-24/09/2023 18:04:30 INFO: - get_csv: Data shape: (27543, 3)
-24/09/2023 18:04:30 INFO: - SQL: CREATE OR REPLACE TABLE raw.part_relationships AS SELECT * FROM df_upload
-24/09/2023 18:04:30 INFO: - Verifying Uploaded Data - Result: raw.part_relationships: (27543, 3)
-24/09/2023 18:04:30 INFO: Finished processing task: part_relationships_data
-24/09/2023 18:04:30 INFO: Looking at task: parts_data type: csv
-24/09/2023 18:04:31 INFO: - get_csv: Data extracted from csv: "data/LegoBricks/parts.csv"
-24/09/2023 18:04:31 INFO: - get_csv: Data shape: (49145, 4)
-24/09/2023 18:04:31 INFO: - SQL: CREATE OR REPLACE TABLE raw.parts AS SELECT * FROM df_upload
-24/09/2023 18:04:31 INFO: - Verifying Uploaded Data - Result: raw.parts: (49145, 4)
-24/09/2023 18:04:31 INFO: Finished processing task: parts_data
-24/09/2023 18:04:31 INFO: Looking at task: sets_data type: csv
-24/09/2023 18:04:31 INFO: - get_csv: Data extracted from csv: "data/LegoBricks/sets.csv"
-24/09/2023 18:04:31 INFO: - get_csv: Data shape: (20406, 6)
-24/09/2023 18:04:31 INFO: - SQL: CREATE OR REPLACE TABLE raw.sets AS SELECT * FROM df_upload
-24/09/2023 18:04:32 INFO: - Verifying Uploaded Data - Result: raw.sets: (20406, 6)
-24/09/2023 18:04:32 INFO: Finished processing task: sets_data
-24/09/2023 18:04:32 INFO: Looking at task: themes_data type: csv
-24/09/2023 18:04:32 INFO: - get_csv: Data extracted from csv: "data/LegoBricks/themes.csv"
-24/09/2023 18:04:32 INFO: - get_csv: Data shape: (459, 3)
-24/09/2023 18:04:32 INFO: - SQL: CREATE OR REPLACE TABLE raw.themes AS SELECT * FROM df_upload
-24/09/2023 18:04:32 INFO: - Verifying Uploaded Data - Result: raw.themes: (459, 3)
-24/09/2023 18:04:32 INFO: Finished processing task: themes_data
-24/09/2023 18:04:32 INFO: Simple Pipe: Yay! 0 tasks failed!
-24/09/2023 18:04:32 INFO: Simple Pipe: Smoked!
+26/09/2023 17:08:38 INFO: Found pipeline: My_Simple_Pipe
+26/09/2023 17:08:38 INFO: Pipeline Description: My simple pipeline template - Lego Bricks sample database
+26/09/2023 17:08:38 INFO: Loading environment variables
+26/09/2023 17:08:38 INFO: Pipeline Config: schema: raw , database engine: duckdb
+26/09/2023 17:08:38 INFO: Connecting to database duckdb: data/simple_pipe.duckdb 
+26/09/2023 17:08:40 INFO: Checking duckdb extensions.
+26/09/2023 17:08:43 INFO: Checking duckdb schema: staging
+26/09/2023 17:08:43 INFO: Checking duckdb schema: raw
+26/09/2023 17:08:43 INFO: Simple Pipe: Smoking!
+26/09/2023 17:08:43 INFO: Simple Pipe: Looking at task list....
+26/09/2023 17:08:43 INFO: - Task: color_data - Load colors.csv file
+26/09/2023 17:08:43 INFO: - Task: elements_data - Process a .cvs file with a list of urls, in this case elements
+26/09/2023 17:08:43 INFO: - Task: inventories_data - Load inventories.csv file
+26/09/2023 17:08:43 INFO: - Skipping Task: inventory_minifigs_data - Load inventory_minifigs.csv file
+26/09/2023 17:08:43 INFO: - Skipping Task: inventory_parts_data - Load inventory_parts.csv file
+26/09/2023 17:08:43 INFO: - Skipping Task: inventory_sets_data - Load inventory_sets.csv file
+26/09/2023 17:08:43 INFO: - Skipping Task: minifigs_data - Load minifigs.csv file
+26/09/2023 17:08:43 INFO: - Skipping Task: worksheet_part_categories - Extract part_categories from online google sheet in xlsx format
+26/09/2023 17:08:43 INFO: - Skipping Task: part_relationships_data - Load part_relationships.csv file
+26/09/2023 17:08:43 INFO: - Skipping Task: parts_data - Load parts.csv file
+26/09/2023 17:08:43 INFO: - Skipping Task: sets_data - Load sets.csv file
+26/09/2023 17:08:43 INFO: - Skipping Task: themes_data - Load themes.csv file
+26/09/2023 17:08:43 INFO: Simple Pipe: Processing Task List
+26/09/2023 17:08:43 INFO: Looking at task: color_data type: csv.duck
+26/09/2023 17:08:43 INFO: - SQL: CREATE OR REPLACE TABLE staging.colours AS SELECT * FROM read_csv_auto('data/LegoBricks/colors.csv')
+26/09/2023 17:08:43 INFO: - Verifying Uploaded Data - Result: staging.colours: [(217, 4)]
+26/09/2023 17:08:43 INFO: - Loading from: staging.colours to: raw.colours
+26/09/2023 17:08:43 INFO: - SQL: CREATE OR REPLACE TABLE raw.colours AS SELECT * FROM staging.colours
+26/09/2023 17:08:43 INFO: - Verifying Uploaded Data - Result: raw.colours: [(217, 4)]
+26/09/2023 17:08:43 INFO: Finished processing task: color_data
+26/09/2023 17:08:43 INFO: Looking at task: elements_data type: csv.filelist
+26/09/2023 17:08:43 INFO: - get_csv: Data extracted from csv: "data/LegoBricks/elements_urls.csv"
+26/09/2023 17:08:43 INFO: - get_csv: Data shape: (2, 1)
+26/09/2023 17:08:43 INFO: - get_csv: Data extracted from csv: "data/LegoBricks/elements_a.csv"
+26/09/2023 17:08:43 INFO: - get_csv: Data shape: (9577, 3)
+26/09/2023 17:08:43 INFO: - get_csv: Data extracted from csv: "data/LegoBricks/elements_b.csv"
+26/09/2023 17:08:43 INFO: - get_csv: Data shape: (64591, 3)
+26/09/2023 17:08:43 INFO: - SQL filtering: elements
+26/09/2023 17:08:43 INFO: - SQL filter Result: (74168, 3)
+26/09/2023 17:08:43 INFO: - SQL: CREATE OR REPLACE TABLE raw.elements AS SELECT * FROM df_upload
+26/09/2023 17:08:44 INFO: - Verifying Uploaded Data - Result: raw.elements: (74168, 3)
+26/09/2023 17:08:44 INFO: Finished processing task: elements_data
+26/09/2023 17:08:44 INFO: Looking at task: inventories_data type: csv
+26/09/2023 17:08:44 INFO: - get_csv: Data extracted from csv: "data/LegoBricks/inventories.csv"
+26/09/2023 17:08:44 INFO: - get_csv: Data shape: (34614, 3)
+26/09/2023 17:08:44 INFO: - SQL: CREATE OR REPLACE TABLE raw.inventories AS SELECT * FROM df_upload
+26/09/2023 17:08:44 INFO: - Verifying Uploaded Data - Result: raw.inventories: (34614, 3)
+26/09/2023 17:08:44 INFO: Finished processing task: inventories_data
+26/09/2023 17:08:44 INFO: Simple Pipe: Yay! 0 tasks failed!
+26/09/2023 17:08:44 INFO: Simple Pipe: Smoked!
 ****************************************************************************************************

@@ -47,13 +47,6 @@ def connect(db, db_name, db_path=None):
 
 @retry(stop=stop_after_attempt(3), wait=wait_fixed(2))
 def df_load(conn, df_upload, sqlfile, sqlschema, sqlwrite="append"):
-    try:
-        sql = f"CREATE SCHEMA IF NOT EXISTS {sqlschema}"
-        conn.sql(sql)
-    except Exception as e:
-        logging.error(f"Database connection error: {e}")
-        print(e)
-        raise e
 
     try:
         if sqlwrite == "replace":
