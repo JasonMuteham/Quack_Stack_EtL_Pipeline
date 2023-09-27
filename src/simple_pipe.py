@@ -83,8 +83,6 @@ if __name__ == "__main__":
     for task in tasks:
         if tasks[task]["active"]:
             logging.info(f"Starting task: {task} type: {tasks[task]['file_type']}")
-            no_load = False
-            duck_load = False
             sql_table = tasks[task]["sql_table"]
             sql_filter_name = tasks[task]["sql_filter"]
 
@@ -124,8 +122,6 @@ if __name__ == "__main__":
                      logging.info(f"- SQL filtering: {sql_filter_name}")
 
                 myduck.load(db_con,sql_table,pipeline["schema"], schema_from="staging",sql_write=sql_write, sql_filter= sql_filter)  # noqa: E501
-                no_load = True
-                duck_load = True
 
             elif tasks[task]["file_type"] == "csv":
                 url=tasks[task]["url"]
@@ -134,15 +130,12 @@ if __name__ == "__main__":
                      logging.info(f"- SQL filtering: {sql_filter_name}")
 
                 myduck.load(db_con,sql_table,pipeline["schema"], schema_from="staging",sql_write=sql_write, sql_filter= sql_filter)  # noqa: E501
-                no_load = True
-                duck_load = True
 
             else:
                 logging.info(
                     f'- Oops problem with the task "{task}". The task type {tasks[task]["file_type"]} is not support (yet!)'  # noqa: E501
                 )
                 failed_tasks += 1
-                no_load = True
  
             logging.info(f"Finished processing task: {task}")
 
