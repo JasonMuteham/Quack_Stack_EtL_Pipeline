@@ -1,7 +1,5 @@
 from pathlib import Path
-import pandas as pd
 import get
-import database
 import env_setup
 import logging
 import tomllib
@@ -53,10 +51,8 @@ if __name__ == "__main__":
         f"Pipeline Config: schema: {pipeline['schema']} , database engine: {pipeline['database']}"
     )
 
-
     db_name = pipe_cfg[pipeline["database"]]["credentials"]["database"]
     db_path = pipe_cfg[pipeline["database"]]["credentials"]["path"]
-
 
     logging.info(f"Connecting to database {pipeline['database']}: {db_path}/{db_name} ")
     try:
@@ -67,7 +63,6 @@ if __name__ == "__main__":
     else:
         logging.info("Checking duckdb extensions.")
         myduck.checkdb(db_con)
-
         logging.info("Checking duckdb schema: staging")
         myduck.schema(db_con,"staging")
         logging.info(f"Checking duckdb schema: {pipeline['schema']}")
@@ -87,34 +82,58 @@ if __name__ == "__main__":
 
     for task in tasks:
         if tasks[task]["active"]:
-            logging.info(f"Looking at task: {task} type: {tasks[task]['file_type']}")
+            logging.info(f"Starting task: {task} type: {tasks[task]['file_type']}")
             no_load = False
             duck_load = False
-            df_upload = pd.DataFrame()
             sql_table = tasks[task]["sql_table"]
             sql_filter_name = tasks[task]["sql_filter"]
+
             if sql_filter_name:
                 sql_filter = pipe_cfg["sql"][sql_filter_name]["sql"]
+            else:
+                sql_filter = None
+
             sql_write = tasks[task]["sql_write"]
 
             if tasks[task]["file_type"] == "excel":
+                """
+                Use Pandas for excel read as it has more features!
+                """
                 df_upload = get.excel(
                     tasks[task]["url"],
                     tasks[task]["workbook"],
                     tasks[task]["skiprows"],
                     tasks[task]["columns"],
                 )
-
-            elif tasks[task]["file_type"] == "csv":
-                df_upload = get.csv(tasks[task]["url"])
+                if df_upload.empty:
+                    logging.warning(f"- {task}: No raw data extracted")
+                    failed_tasks += 1
+                else:
+                    if sql_filter_name:
+                        logging.info(f"- SQL filtering: {sql_filter_name}")
+                        df_upload = get.sqlfilter(db_con, df_upload, sql_filter)
+                    if df_upload.empty:
+                        logging.warning(f"- {sql_filter_name}: Returned no data!")
+                        failed_tasks += 1
+                    else:
+                        myduck.df_load(db_con,df_upload,sql_table,sqlschema=pipeline["schema"],sqlwrite=sql_write)
 
             elif tasks[task]["file_type"] == "csv.filelist":
-                df_upload = get.csv_filelist(tasks[task]["url"])
+                myduck.csv_filelist(db_con, tasks[task]["url"], sql_table)
+                if sql_filter_name:
+                     logging.info(f"- SQL filtering: {sql_filter_name}")
 
-            elif tasks[task]["file_type"] == "csv.duck":
+                myduck.load(db_con,sql_table,pipeline["schema"], schema_from="staging",sql_write=sql_write, sql_filter= sql_filter)  # noqa: E501
+                no_load = True
+                duck_load = True
+
+            elif tasks[task]["file_type"] == "csv":
                 url=tasks[task]["url"]
                 myduck.csv(db_con, url, sql_table, schema="staging", replace=True)
-                myduck.load(db_con,sql_table,pipeline["schema"], schema_from="staging",sql_write=sql_write)
+                if sql_filter_name:
+                     logging.info(f"- SQL filtering: {sql_filter_name}")
+
+                myduck.load(db_con,sql_table,pipeline["schema"], schema_from="staging",sql_write=sql_write, sql_filter= sql_filter)  # noqa: E501
                 no_load = True
                 duck_load = True
 
@@ -124,29 +143,6 @@ if __name__ == "__main__":
                 )
                 failed_tasks += 1
                 no_load = True
-
-            if df_upload.empty and not(duck_load):
-                logging.warning(f"- {task}: No raw data extracted")
-                failed_tasks += 1
-            else:
-                if sql_filter_name:
-                    logging.info(f"- SQL filtering: {sql_filter_name}")
-                    df_upload = get.sqlfilter(db_con, df_upload, sql_filter)
-                    if df_upload.empty:
-                        logging.warning(f"- {sql_filter_name}: Returned no data!")
-                        failed_tasks += 1
-
-            if (df_upload.empty):
-                no_load = True
-
-            if not(no_load):
-                database.df_load(
-                    db_con,
-                    df_upload,                        
-                    sql_table,
-                    sqlschema=pipeline["schema"],
-                    sqlwrite=sql_write
-                )
  
             logging.info(f"Finished processing task: {task}")
 

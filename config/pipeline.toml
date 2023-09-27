@@ -14,7 +14,7 @@ logfile = "simple_pipe.log"
 
 [task.color_data]
 active = true
-file_type = "csv.duck"
+file_type = "csv"
 description = "Load colors.csv file"
 url = "data/LegoBricks/colors.csv"
 sql_filter = ""
@@ -40,7 +40,7 @@ sql_table = "inventories"
 sql_write = "replace"
 
 [task.inventory_minifigs_data]
-active = false
+active = true
 file_type = "csv"
 description = "Load inventory_minifigs.csv file"
 url = "data/LegoBricks/inventory_minifigs.csv"
@@ -49,7 +49,7 @@ sql_table = "inventory_minifigs"
 sql_write = "replace"
 
 [task.inventory_parts_data]
-active = false
+active = true
 file_type = "csv"
 description = "Load inventory_parts.csv file"
 url = "data/LegoBricks/inventory_parts.csv"
@@ -58,7 +58,7 @@ sql_table = "inventory_parts"
 sql_write = "replace"
 
 [task.inventory_sets_data]
-active = false
+active = true
 file_type = "csv"
 description = "Load inventory_sets.csv file"
 url = "data/LegoBricks/inventory_sets.csv"
@@ -67,7 +67,7 @@ sql_table = "inventory_sets"
 sql_write = "replace"
 
 [task.minifigs_data]
-active = false
+active = true
 file_type = "csv"
 description = "Load minifigs.csv file"
 url = "data/LegoBricks/minifigs.csv"
@@ -77,15 +77,15 @@ sql_write = "replace"
 
 [task.worksheet_part_categories_csv]
 active = true
-file_type = "csv.duck"
+file_type = "csv"
 description = "Extract part_categories from online google sheet in csv format"
 url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSRopkzwpUEk9CeRA9AS09ln8YxbJ_7c28BbXCzBvW15OLEPkGlVPBzF8LQCLInvYfjE6LEw__LSorl/pub?gid=1097541840&single=true&output=csv"
 sql_filter = ""
 sql_table = "part_categories"
 sql_write = "replace"
 
-[task.worksheet_part_categories]
-active = false
+[task.worksheet_part_categories_excel]
+active = true
 file_type = "excel"
 description = "Extract part_categories from online google sheet in xlsx format"
 url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSRopkzwpUEk9CeRA9AS09ln8YxbJ_7c28BbXCzBvW15OLEPkGlVPBzF8LQCLInvYfjE6LEw__LSorl/pub?output=xlsx"
@@ -93,11 +93,11 @@ workbook = "Part Categories"
 skiprows = 4
 columns = "a:b"
 sql_filter = ""
-sql_table = "part_categories"
+sql_table = "part_categories_xls"
 sql_write = "replace"
 
 [task.part_relationships_data]
-active = false
+active = true
 file_type = "csv"
 description = "Load part_relationships.csv file"
 url = "data/LegoBricks/part_relationships.csv"
@@ -106,7 +106,7 @@ sql_table = "part_relationships"
 sql_write = "replace"
 
 [task.parts_data]
-active = false
+active = true
 file_type = "csv"
 description = "Load parts.csv file"
 url = "data/LegoBricks/parts.csv"
@@ -115,7 +115,7 @@ sql_table = "parts"
 sql_write = "replace"
 
 [task.sets_data]
-active = false
+active = true
 file_type = "csv"
 description = "Load sets.csv file"
 url = "data/LegoBricks/sets.csv"
@@ -124,7 +124,7 @@ sql_table = "sets"
 sql_write = "replace"
 
 [task.themes_data]
-active = false
+active = true
 file_type = "csv"
 description = "Load themes.csv file"
 url = "data/LegoBricks/themes.csv"
@@ -149,7 +149,7 @@ sql = """
                 "element_id",
                 "part_num",
                 "color_id" AS "colour_id"
-        FROM df_upload
+        FROM staging.elements
 """
 
 [sql.inventory_parts]
@@ -161,6 +161,6 @@ sql ="""
                 "quantity",
                 "is_spare",
                 "img_url"
-        FROM df_upload
+        FROM staging.inventory_parts
 """
 
