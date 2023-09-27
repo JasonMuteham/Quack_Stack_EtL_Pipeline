@@ -3,6 +3,11 @@ import pandas as pd
 import logging
 from tenacity import retry, stop_after_attempt, TryAgain, wait_fixed
 
+"""
+Pandas has more features for excel & csv and will extract from api calls
+so these helper functions are not used instead of Duckdb when required
+"""
+
 def excel(excel_url, excel_workbook, excel_skiprows, excel_usecols):
     df = pd.DataFrame()
     def get_excel(excel_url, excel_workbook, excel_skiprows, excel_usecols):

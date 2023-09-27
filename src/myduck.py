@@ -81,7 +81,7 @@ def schema(con, schema):
         raise e
 
 def csv_filelist(con, url: str, sql_table):
-    sql = f"SELECT * FROM read_csv_auto('{url}', skip=1)"
+    sql = f"SELECT * FROM read_csv_auto('{url}')"
     result = con.sql(sql).fetchall()
     replace = True
     for csv_file in result:

@@ -4,6 +4,7 @@ import env_setup
 import logging
 import tomllib
 import myduck
+import custom # put your custom code in this module # noqa: F401
 
 if __name__ == "__main__":
     print(f"{'*'*50}\nSearching for my pipe....")
@@ -42,7 +43,7 @@ if __name__ == "__main__":
 
     pipeline = pipe_cfg["pipeline"]
     logging.info(f'Found pipeline: {pipeline["name"]}')
-    logging.info(f'Pipeline Description: {pipeline["description"]}')
+    logging.info(f'Description: {pipeline["description"]}')
 
     logging.info("Loading environment variables")
     env_setup.load()
@@ -61,7 +62,7 @@ if __name__ == "__main__":
         print(e)
         raise
     else:
-        logging.info("Checking duckdb extensions.")
+        logging.info("Checking duckdb extensions")
         myduck.checkdb(db_con)
         logging.info("Checking duckdb schema: staging")
         myduck.schema(db_con,"staging")
@@ -83,15 +84,19 @@ if __name__ == "__main__":
     for task in tasks:
         if tasks[task]["active"]:
             logging.info(f"Starting task: {task} type: {tasks[task]['file_type']}")
-            sql_table = tasks[task]["sql_table"]
-            sql_filter_name = tasks[task]["sql_filter"]
-
-            if sql_filter_name:
-                sql_filter = pipe_cfg["sql"][sql_filter_name]["sql"]
-            else:
-                sql_filter = None
-
-            sql_write = tasks[task]["sql_write"]
+            try:
+                sql_table = tasks[task]["sql_table"]
+            except Exception:
+                sql_table = None
+                sql_filter_name = None
+                sql_write = None
+            else:    
+                sql_filter_name = tasks[task]["sql_filter"]
+                if sql_filter_name:
+                    sql_filter = pipe_cfg["sql"][sql_filter_name]["sql"]
+                else:
+                    sql_filter = None
+                sql_write = tasks[task]["sql_write"]
 
             if tasks[task]["file_type"] == "excel":
                 """
@@ -130,7 +135,14 @@ if __name__ == "__main__":
                      logging.info(f"- SQL filtering: {sql_filter_name}")
 
                 myduck.load(db_con,sql_table,pipeline["schema"], schema_from="staging",sql_write=sql_write, sql_filter= sql_filter)  # noqa: E501
-
+            
+            elif tasks[task]["file_type"].split(".")[0] == "function":
+                """
+                your custom function call 'function.'<module>.<function>
+                eg. function.custom.get_mps
+                """
+                params = tasks[task]['param']
+                eval('.'.join(tasks[task]["file_type"].split('.')[1:]))(params)  
             else:
                 logging.info(
                     f'- Oops problem with the task "{task}". The task type {tasks[task]["file_type"]} is not support (yet!)'  # noqa: E501

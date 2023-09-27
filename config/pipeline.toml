@@ -1,7 +1,7 @@
 [pipeline]
 name = "My_Simple_Pipe"
 description = "My simple pipeline template - Lego Bricks sample database"
-# Database scheme name raw, staging, production etc
+# Database scheme name raw, production etc *Not* "staging"
 schema = "raw"
 # Database engine local 'duckdb' or remote 'motherduck' 
 database = "duckdb"
@@ -12,7 +12,7 @@ level = "INFO"
 log_folder = "log"
 logfile = "simple_pipe.log"
 
-[task.color_data]
+[task.colour_data]
 active = true
 file_type = "csv"
 description = "Load colors.csv file"
@@ -76,7 +76,7 @@ sql_table = "minifigs"
 sql_write = "replace"
 
 [task.worksheet_part_categories_csv]
-active = true
+active = false
 file_type = "csv"
 description = "Extract part_categories from online google sheet in csv format"
 url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSRopkzwpUEk9CeRA9AS09ln8YxbJ_7c28BbXCzBvW15OLEPkGlVPBzF8LQCLInvYfjE6LEw__LSorl/pub?gid=1097541840&single=true&output=csv"
@@ -85,7 +85,7 @@ sql_table = "part_categories"
 sql_write = "replace"
 
 [task.worksheet_part_categories_excel]
-active = true
+active = false
 file_type = "excel"
 description = "Extract part_categories from online google sheet in xlsx format"
 url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSRopkzwpUEk9CeRA9AS09ln8YxbJ_7c28BbXCzBvW15OLEPkGlVPBzF8LQCLInvYfjE6LEw__LSorl/pub?output=xlsx"
@@ -131,6 +131,13 @@ url = "data/LegoBricks/themes.csv"
 sql_filter = ""
 sql_table = "themes"
 sql_write = "replace"
+
+[task.call_my_function]
+active = true
+description = "Call a custom function <module>.<function>"
+file_type = "function.custom.myfunction"
+param.first_parameter = "Lego"
+param.second_parameter = "Is Cool!"
 
 [duckdb.credentials]
 # local duckdb database name. Remote motherduck credentials are stored in secret.toml

@@ -4,13 +4,30 @@ A very lightweight EtL pipeline builder with transformations and scheduling.
 
 Flat Files -> transform -> DuckDB or Motherduck -> GitHub Actions
 
+run pipeline with
+
+### python src/simple_pipe.py ###
+
+configure pipeline in
+
+### config/pipeline.toml ###
+
 Test pipeline locally with **DuckDB** then to the cloud with **Motherduck**.
 
 Currently works with excel & csv files.  
 
-Uses pandas for import and Duckdb native connection/SQL for export to database.
+Uses pandas for import of excel files and Duckdb native connection/SQL for csv import/export to database.
 
-Transformation of the data is performed as a SQL select on the loaded DataFrame.
+Data is initially loaded to the schema "staging". Then filtered and loaded to the schema in pipeline.toml
+
+Transformation of the data is performed as a SQL select on the staged table, dbt-ish.
+
+Sample Pipeline of Lego Bricks Data included. The pipeline loads various .csv file transforming
+'color' to 'colour'. 
+
+![rebrickable schema](https://rebrickable.com/static/img/diagrams/downloads_schema_v3.png)
+
+Schema & data from [rebrickable](https://rebrickable.com)
 
 
 ## pipeline.toml
@@ -23,7 +40,7 @@ name = "My_Simple_Pipe"
 
 description = "My simple pipeline template"
 
-schema = "raw" or "staging" or "Prod" # any preferred name.
+schema = "raw" or "Prod" # any preferred name **NOT** "staging" as used internally
 
 database = "duckdb" or "motherduck"
 
@@ -73,7 +90,17 @@ sql_table = "my_table_b"
 
 sql_write = "replace"
 
-### [task.another_task]
+### [task.custom_task]
+
+active = true
+
+description = "Call a custom function"
+
+file_type = "function.custom.myfunction"
+
+param.first_parameter = "Lego"
+
+param.second_parameter = "Is Cool!"
 
 ...
 
@@ -99,7 +126,7 @@ sql = """
 
 SELECT * ***or a selection of columns***
 
-FROM ***df_upload***   #always use df_upload 
+FROM ***staging.<sql_table>***   #eg. FROM staging.colours
 
 WHERE ***your_condition_is_met***
 
