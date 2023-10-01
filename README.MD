@@ -1,6 +1,6 @@
 # Quack Stack EtL Pipeline 
 
-A very lightweight EtL pipeline builder with transformations and scheduling.
+A lightweight EtL pipeline builder with transformations and scheduling to form part of a Quack Stack.
 
 Flat Files -> transform -> DuckDB or Motherduck -> GitHub Actions
 
