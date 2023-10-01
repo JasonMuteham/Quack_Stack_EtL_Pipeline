@@ -1,5 +1,7 @@
 # Quack Stack EtL Pipeline 
 
+Uses duckdb 0.8.1 will upgrade to 0.9.0 when Motherduck upgrades (10th Oct 2023).
+
 A lightweight EtL pipeline builder with transformations and scheduling to form part of a Quack Stack.
 
 Flat Files -> transform -> DuckDB or Motherduck -> GitHub Actions
