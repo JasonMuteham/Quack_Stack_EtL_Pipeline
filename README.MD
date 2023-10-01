@@ -1,4 +1,4 @@
-# Simple EtL Pipeline
+# Quack Stack EtL Pipeline 
 
 A very lightweight EtL pipeline builder with transformations and scheduling.
 
