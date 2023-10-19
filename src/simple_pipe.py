@@ -5,14 +5,14 @@ import tomllib
 import custom # put your custom code in this module # noqa: F401
 
 if __name__ == "__main__":
-    print(f"{'*'*50}\nSearching for my pipe....")
+    print(f"{'*'*50}\nSearching for my pond....")
     failed_tasks = 0
 
     try:
         with open("config/pipeline.toml", "rb") as f:
             pipe_cfg = tomllib.load(f)
     except Exception as e:
-        print(f"*** Where's the pipe? ***\n{e}")
+        print(f"*** Where's the pond? ***\n{e}")
         raise
 
     log_file = pipe_cfg["logging"]["logfile"]
@@ -37,7 +37,7 @@ if __name__ == "__main__":
         filemode="w",
     )
     logging.info(f"Simple Pipe: Lighting the fire!\n{'*'*100}")
-    print("Lighting the pipe...")
+    print("Taking flight...")
 
     pipeline = pipe_cfg["pipeline"]
     logging.info(f'Found pipeline: {pipeline["name"]}')
@@ -154,7 +154,7 @@ if __name__ == "__main__":
     else:
         fail_txt = "Yay!"
 
-    print(f"{fail_txt} Pipe went out {failed_tasks} times!")
+    print(f"{fail_txt} Ducks went down {failed_tasks} times!")
     logging.info(f"Simple Pipe: {fail_txt} {failed_tasks} tasks failed!")
     logging.info(f"Simple Pipe: Smoked!\n{'*'*100}")
-    print(f"Pipe smoked!\n{'*'*50}")
+    print(f"Ducks safely in pond!\n{'*'*50}")
