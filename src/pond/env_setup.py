@@ -2,7 +2,7 @@ import os
 import tomllib
 
 
-def load():
+def env_load():
     MOTHERDUCK_TOKEN = os.getenv("MOTHERDUCK_TOKEN") 
 
     if MOTHERDUCK_TOKEN is None:

@@ -76,7 +76,7 @@ sql_table = "minifigs"
 sql_write = "replace"
 
 [task.worksheet_part_categories_csv]
-active = false
+active = true
 file_type = "csv"
 description = "Extract part_categories from online google sheet in csv format"
 url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSRopkzwpUEk9CeRA9AS09ln8YxbJ_7c28BbXCzBvW15OLEPkGlVPBzF8LQCLInvYfjE6LEw__LSorl/pub?gid=1097541840&single=true&output=csv"
@@ -85,7 +85,7 @@ sql_table = "part_categories"
 sql_write = "replace"
 
 [task.worksheet_part_categories_excel]
-active = false
+active = true
 file_type = "excel"
 description = "Extract part_categories from online google sheet in xlsx format"
 url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSRopkzwpUEk9CeRA9AS09ln8YxbJ_7c28BbXCzBvW15OLEPkGlVPBzF8LQCLInvYfjE6LEw__LSorl/pub?output=xlsx"

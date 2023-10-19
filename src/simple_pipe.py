@@ -1,9 +1,7 @@
 from pathlib import Path
-import get
-import env_setup
+import pond
 import logging
 import tomllib
-import myduck
 import custom # put your custom code in this module # noqa: F401
 
 if __name__ == "__main__":
@@ -46,7 +44,7 @@ if __name__ == "__main__":
     logging.info(f'Description: {pipeline["description"]}')
 
     logging.info("Loading environment variables")
-    env_setup.load()
+    pond.env_load()
 
     logging.info(
         f"Pipeline Config: schema: {pipeline['schema']} , database engine: {pipeline['database']}"
@@ -57,17 +55,17 @@ if __name__ == "__main__":
 
     logging.info(f"Connecting to database {pipeline['database']}: {db_path}/{db_name} ")
     try:
-        db_con = myduck.connect(pipeline["database"], db_name, db_path=db_path)
+        db_con = pond.connect(pipeline["database"], db_name, db_path=db_path)
     except Exception as e:
         print(e)
         raise
     else:
         logging.info("Checking duckdb extensions")
-        myduck.checkdb(db_con)
+        pond.checkdb(db_con)
         logging.info("Checking duckdb schema: staging")
-        myduck.schema(db_con,"staging")
+        pond.schema(db_con,"staging")
         logging.info(f"Checking duckdb schema: {pipeline['schema']}")
-        myduck.schema(db_con, pipeline['schema'])
+        pond.schema(db_con, pipeline['schema'])
 
     logging.info("Simple Pipe: Smoking!")
     logging.info("Simple Pipe: Looking at task list....")
@@ -102,7 +100,7 @@ if __name__ == "__main__":
                 """
                 Use Pandas for excel read as it has more features!
                 """
-                df_upload = get.excel(
+                df_upload = pond.excel(
                     tasks[task]["url"],
                     tasks[task]["workbook"],
                     tasks[task]["skiprows"],
@@ -114,27 +112,27 @@ if __name__ == "__main__":
                 else:
                     if sql_filter_name:
                         logging.info(f"- SQL filtering: {sql_filter_name}")
-                        df_upload = get.sqlfilter(db_con, df_upload, sql_filter)
+                        df_upload = pond.sqlfilter(db_con, df_upload, sql_filter)
                     if df_upload.empty:
                         logging.warning(f"- {sql_filter_name}: Returned no data!")
                         failed_tasks += 1
                     else:
-                        myduck.df_load(db_con,df_upload,sql_table,sqlschema=pipeline["schema"],sqlwrite=sql_write)
+                        pond.df_load(db_con,df_upload,sql_table,sqlschema=pipeline["schema"],sqlwrite=sql_write)
 
             elif tasks[task]["file_type"] == "csv.filelist":
-                myduck.csv_filelist(db_con, tasks[task]["url"], sql_table)
+                pond.csv_filelist(db_con, tasks[task]["url"], sql_table)
                 if sql_filter_name:
                      logging.info(f"- SQL filtering: {sql_filter_name}")
 
-                myduck.load(db_con,sql_table,pipeline["schema"], schema_from="staging",sql_write=sql_write, sql_filter= sql_filter)  # noqa: E501
+                pond.load(db_con,sql_table,pipeline["schema"], schema_from="staging",sql_write=sql_write, sql_filter= sql_filter)  # noqa: E501
 
             elif tasks[task]["file_type"] == "csv":
                 url=tasks[task]["url"]
-                myduck.csv(db_con, url, sql_table, schema="staging", replace=True)
+                pond.csv(db_con, url, sql_table, schema="staging", replace=True)
                 if sql_filter_name:
                      logging.info(f"- SQL filtering: {sql_filter_name}")
 
-                myduck.load(db_con,sql_table,pipeline["schema"], schema_from="staging",sql_write=sql_write, sql_filter= sql_filter)  # noqa: E501
+                pond.load(db_con,sql_table,pipeline["schema"], schema_from="staging",sql_write=sql_write, sql_filter= sql_filter)  # noqa: E501
             
             elif tasks[task]["file_type"].split(".")[0] == "function":
                 """
