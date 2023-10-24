@@ -5,14 +5,14 @@ import tomllib
 import custom # put your custom code in this module # noqa: F401
 
 if __name__ == "__main__":
-    print(f"{'*'*50}\nSearching for my pond....")
+    print(f"{'*'*50}\nSearching for my duck pond....")
     failed_tasks = 0
 
     try:
         with open("config/pipeline.toml", "rb") as f:
             pipe_cfg = tomllib.load(f)
     except Exception as e:
-        print(f"*** Where's the pond? ***\n{e}")
+        print(f"*** Where is the duck pond? ***\n{e}")
         raise
 
     log_file = pipe_cfg["logging"]["logfile"]
@@ -36,7 +36,7 @@ if __name__ == "__main__":
         datefmt="%d/%m/%Y %H:%M:%S",
         filemode="w",
     )
-    logging.info(f"Simple Pipe: Lighting the fire!\n{'*'*100}")
+    logging.info(f"Duck Pond: Taking flight...\n{'*'*100}")
     print("Taking flight...")
 
     pipeline = pipe_cfg["pipeline"]
@@ -67,8 +67,8 @@ if __name__ == "__main__":
         logging.info(f"Checking duckdb schema: {pipeline['schema']}")
         pond.schema(db_con, pipeline['schema'])
 
-    logging.info("Simple Pipe: Smoking!")
-    logging.info("Simple Pipe: Looking at task list....")
+    logging.info("Duck Pond: Get my ducks in a row!")
+    logging.info("Duck Pond: Looking at task list....")
     tasks = pipe_cfg["task"]
 
     for task in tasks:
@@ -77,7 +77,7 @@ if __name__ == "__main__":
         else:
             logging.info(f"- Skipping Task: {task} - {tasks[task]['description']}")
 
-    logging.info("Simple Pipe: Processing Task List")
+    logging.info("Duck Pond: Processing Task List")
 
     for task in tasks:
         if tasks[task]["active"]:
@@ -154,7 +154,7 @@ if __name__ == "__main__":
     else:
         fail_txt = "Yay!"
 
-    print(f"{fail_txt} Ducks went down {failed_tasks} times!")
-    logging.info(f"Simple Pipe: {fail_txt} {failed_tasks} tasks failed!")
-    logging.info(f"Simple Pipe: Smoked!\n{'*'*100}")
-    print(f"Ducks safely in pond!\n{'*'*50}")
+    print(f"{fail_txt} Ducks went missing {failed_tasks} times!")
+    logging.info(f"Duck Pond: {fail_txt} {failed_tasks} tasks failed!")
+    logging.info(f"Duck Pond: Ducks safely in the pond!\n{'*'*100}")
+    print(f"Ducks safely in the pond!\n{'*'*50}")

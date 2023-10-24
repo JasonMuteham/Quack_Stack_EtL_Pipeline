@@ -1,6 +1,6 @@
 [pipeline]
-name = "My_Simple_Pipe"
-description = "My simple pipeline template - Lego Bricks sample database"
+name = "My_Duck_Pond"
+description = "A simple EtL pipeline template - Lego Bricks sample database"
 # Database scheme name raw, production etc *Not* "staging"
 schema = "raw"
 # Database engine local 'duckdb' or remote 'motherduck' 
@@ -10,7 +10,7 @@ database = "duckdb"
 [logging]
 level = "INFO"
 log_folder = "log"
-logfile = "simple_pipe.log"
+logfile = "duck_pond.log"
 
 [task.colour_data]
 active = true
@@ -142,12 +142,12 @@ param.second_parameter = "Is Cool!"
 [duckdb.credentials]
 # local duckdb database name. Remote motherduck credentials are stored in secret.toml
 path = "data"
-database = "simple_pipe.duckdb"
+database = "duck_pond.duckdb"
 
 [motherduck.credentials]
 # local duckdb database name. Remote motherduck credentials are stored in secret.toml
 path = ""
-database = "simple_pipe"
+database = "duck_pond"
 
 #SQL Filter statements, filter the df_upload DataFrame
 [sql.elements]

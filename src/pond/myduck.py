@@ -151,7 +151,7 @@ def load(con,sql_table,schema_to, schema_from="staging",sql_write="replace",sql_
     try:
         load_data(con,sql_table,schema_to, schema_from, sql_write, sql_filter)
     except TryAgain as e:
-        logging.critical(f'- myduck.load: Retry limit reached: {url}')
+        logging.critical(f'- myduck.load: Retry limit reached: {e}')
 
 @retry(stop=stop_after_attempt(3), wait=wait_fixed(2))
 def df_load(conn, df_upload, sqlfile, sqlschema, sqlwrite="append"):
