@@ -95,6 +95,7 @@ columns = "a:b"
 sql_filter = ""
 sql_table = "part_categories_xls"
 sql_write = "replace"
+csv_file = "data/part_categories.csv"
 
 [task.part_relationships_data]
 active = true

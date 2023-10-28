@@ -118,6 +118,8 @@ if __name__ == "__main__":
                         failed_tasks += 1
                     else:
                         pond.df_load(db_con,df_upload,sql_table,sqlschema=pipeline["schema"],sqlwrite=sql_write)
+                        if tasks[task]["csv_file"]:
+                            df_upload.to_csv(tasks[task]["csv_file"], index=False)
 
             elif tasks[task]["file_type"] == "csv.filelist":
                 pond.csv_filelist(db_con, tasks[task]["url"], sql_table)
